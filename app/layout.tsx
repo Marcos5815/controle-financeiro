@@ -1,10 +1,11 @@
 "use client"
 import { Lexend_Deca } from "next/font/google";
 import "./globals.css";
-import { Box, ThemeProvider } from "@mui/material";
-import theme from "./theme"
+import { Box, CssBaseline } from "@mui/material";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppThemeProvider } from "@/contexts/themeContext/page";
+import { LanguageProvider } from "@/contexts/languageContext/page";
 
 const queryClient = new QueryClient() 
 
@@ -27,12 +28,15 @@ export default function RootLayout({
 
       <body className="min-h-full min-w-full flex">
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={theme}>
+          <AppThemeProvider>
+            <LanguageProvider>
+              <CssBaseline />
               <Sidebar />
               <Box className="flex flex-col mt-15 ml-2">
                 {children}
               </Box>
-          </ThemeProvider>
+            </LanguageProvider>
+          </AppThemeProvider>
         </QueryClientProvider>
       </body>
     </html>

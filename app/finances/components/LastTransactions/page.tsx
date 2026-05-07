@@ -24,6 +24,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useSearchParams } from "next/navigation";
 import { IncomeModal } from "../modals/IncomeModal/page";
 import { ExpenseModal } from '../modals/ExpenseModal/page';
+import { useLanguage } from "@/contexts/languageContext/page";
 
 const formattedValue = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
@@ -34,10 +35,10 @@ export const LastTransactions = ({ ...props }) => {
   const searchParams = useSearchParams()
   const { data, isLoading, error, deleteTransaction } = useFinance();
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
   
-  const periodFilter = searchParams.get('period');
+  const periodFilter = searchParams.get('period')
   const startRangeDate = searchParams.get('start')
   const endRangeDate = searchParams.get('end')
 
@@ -52,8 +53,10 @@ export const LastTransactions = ({ ...props }) => {
 
   const [ selectId, setSelectId ] = useState<string>("")
 
-  const [ isIncomeModalOpen, setIsIncomeModalOpen ] = useState(false);
+  const [ isIncomeModalOpen, setIsIncomeModalOpen ] = useState(false)
   const [ isExpenseModalOpen, setIsExpenseModalOpen ] = useState(false)
+
+  const {t} = useLanguage()
 
   useEffect(() => {
     setAnchorEl(anchorRef.current)
@@ -123,23 +126,22 @@ export const LastTransactions = ({ ...props }) => {
     <Box {...props}>
       <Box className="flex flex-col justify-start ml-5 mt-3 mb-5">
         <Typography className="font-bold! text-xl!">
-          Últimas transações
+           {t("lastTransactions")}
         </Typography>
-        <Typography>Veja suas transações</Typography>
+        <Typography>{t("lastTransactionsLabel")}</Typography>
       </Box>
       <TableContainer component={Paper} className="max-h-80.5">
         <Table className="min-w-full" aria-label="Últimas transações">
           <TableHead>
-            <TableRow className="bg-gray-200">
-              <TableCell className="font-semibold!">Data</TableCell>
-              <TableCell className="font-semibold!">Descrição</TableCell>
+            <TableRow>
+              <TableCell className="font-semibold!">{t("date")}</TableCell>
+              <TableCell className="font-semibold!">{t("description")}</TableCell>
               <TableCell className="font-semibold!" align="right">
-                Valor
+                {t("amount")}
               </TableCell>
               <TableCell className="font-semibold!" align="right">
-                Método
+                {t("method")}
               </TableCell>
-              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -254,9 +256,9 @@ export const LastTransactions = ({ ...props }) => {
               page={page}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
-              labelRowsPerPage={"Linhas por página"}
+              labelRowsPerPage={t("linesPerPage")}
               labelDisplayedRows={({ from, to, count }) => {
-                return `${from}-${to} de ${count !== -1 ? `${count} transações` : `mais de ${to}`}`;
+                return `${from}-${to} ${t("of")} ${count !== -1 ? `${count} ${t("transactions")}` : `${t("moreThan")} ${to}`}`;
               }}
             />
           </TableRow>

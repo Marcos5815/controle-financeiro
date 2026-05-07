@@ -11,6 +11,7 @@ import { addTransactionSchema } from "../Schema/page";
 import { DataTypesMethodCategory, useMethodCategory } from "@/api/methodCategory/page";
 import { InputTags } from "../../InputTags/page";
 import { uuidv4 } from "zod";
+import { useLanguage } from "@/contexts/languageContext/page";
 
 interface TransactionModalProps {
     open: boolean;
@@ -33,6 +34,7 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
     })
     const [ inputCategoryTagsOpen, setInputCategoryTagsOpen ] = useState(false)
     const [ inputMethodTagsOpen, setInputMethodTagsOpen ] = useState(false)
+    const {t} = useLanguage()
 
     const handleCategoryInputTagsOpen = () => {
         setInputCategoryTagsOpen((prev) => !prev)
@@ -113,7 +115,7 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
                 onClose={onClose}
                 className="flex flex-col justify-center items-center"
             >
-                <Box component="form" onSubmit={handleSubmit(handleOnSubmit)} className="w-140 h-150 bg-white text-center">
+                <Box component="form" onSubmit={handleSubmit(handleOnSubmit)} className="w-140 h-150 text-center" sx={{bgcolor: "background01.main"}}>
                     
                     <Box className="flex justify-end ml-5 mt-2">
                         <Button onClick={onClose}><CloseIcon /></Button>
@@ -123,7 +125,7 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
                             {transactionToEdit ? "Editar entrada" : "Adicionar Entrada"}
                         </Typography>
                         <FormControl className="col-span-3">
-                            <InputLabel htmlFor="name">Nome</InputLabel>
+                            <InputLabel htmlFor="name"><Typography color="typography01">{t("name")}</Typography></InputLabel>
                             <Input required {...register("name")} autoComplete="off" id="name" />
                             {errors.name && (
                                 <Typography variant="caption" color="error">
@@ -132,7 +134,7 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
                             )}
                         </FormControl>
                         <FormControl className="col-span-2">
-                            <InputLabel htmlFor="amount">Valor R$</InputLabel>
+                            <InputLabel htmlFor="amount"><Typography color="typography01">{t("amount")}</Typography></InputLabel>
                             <Input required {...register("amount")} id="amount"/>
                             {errors.amount && (
                                 <Typography variant="caption" color="error">
@@ -144,7 +146,7 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
 
                         <FormControl variant="filled" className="col-span-3">
                             <Box className="flex items-center mr-3!">
-                                <InputLabel>Categoria</InputLabel>
+                                <InputLabel><Typography color="typography01">{t("category")}</Typography></InputLabel>
                                 <Controller
                                     name="category"
                                     control={control}
@@ -163,13 +165,13 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
                                     )}
                                 />
                                 <Button onClick={handleCategoryInputTagsOpen} className="h-10!">
-                                    <AddCircleOutlineIcon />
+                                    <AddCircleOutlineIcon sx={{color: "typography01.main"}}/>
                                 </Button>
                             </Box>
                         </FormControl>
                         <FormControl className="col-span-2 ml-5!" variant="filled">
                             <Box className="flex items-center">
-                                <InputLabel>Método</InputLabel>
+                                <InputLabel><Typography color="typography01">{t("method")}</Typography></InputLabel>
                                 <Controller 
                                     name="method"
                                     control={control}
@@ -190,19 +192,20 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
                                 />
 
                             <Button onClick={handleMethodInputTagsOpen} className="h-10!">
-                                <AddCircleOutlineIcon />
+                                <AddCircleOutlineIcon sx={{color: "typography01.main"}}/>
                             </Button>
                                 </Box>
                         </FormControl>
                         <FormControl className="col-span-2">
-                            <Input required {...register("date")} id="date" type="date" />
+                            <Input required {...register("date")} id="date" type="date" sx={{color: "typography01.main"}}/>
                         </FormControl>
                         <Button className="col-end-4 row-end-9 w-25! h-10!" 
                             type="submit" 
                             variant="contained"
                             disabled={updateMutation.isPending}
+                            color="sideBarButton"
                         >
-                            Enviar
+                            {t("submit")}
                         </Button>
                     </Box>
                     <Controller 

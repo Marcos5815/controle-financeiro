@@ -10,11 +10,14 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useState } from "react"
 import { IncomeModal } from "./components/modals/IncomeModal/page"
 import { ExpenseModal } from "./components/modals/ExpenseModal/page"
+import { green } from "@mui/material/colors"
+import { useLanguage } from "@/contexts/languageContext/page"
 
 const Finances = () => {
 
-    const [ isIncomeModalOpen, setIsIncomeModalOpen ] = useState(false);
+    const [ isIncomeModalOpen, setIsIncomeModalOpen ] = useState(false)
     const [ isExpenseModalOpen, setIsExpenseModalOpen ] = useState(false)
+    const {t} = useLanguage()
 
     const handleIsIncomeOpen = () => {
         setIsIncomeModalOpen((prevOpen) => !prevOpen)
@@ -39,9 +42,9 @@ const Finances = () => {
                                 <AddCircleOutlineIcon className="text-green-600" />
                             </Box>
                             <Box className="flex flex-col items-start">
-                                <Typography>Adicionar entrada</Typography>
-                                <Typography className="text-[8px]!">
-                                Adicione quanto dinheiro você recebeu
+                                <Typography className="text-green-600">{t("addEntrance")}</Typography>
+                                <Typography className="text-[8px]! text-green-600">
+                                    {t("addEntranceLabel")}
                                 </Typography>
                             </Box>
                             </Button>
@@ -52,9 +55,9 @@ const Finances = () => {
                                     <RemoveCircleOutlineIcon className="text-red-500" />
                                 </Box>
                                 <Box className="flex flex-col items-start">
-                                    <Typography>Adicionar despesa</Typography>
-                                    <Typography className="text-[8px]!">
-                                    Adicione as suas despesas
+                                    <Typography className="text-red-500">{t("addExpense")}</Typography>
+                                    <Typography className="text-[8px]! text-red-500">
+                                        {t("addExpenseLabel")}
                                     </Typography>
                                 </Box>
                             </Button>

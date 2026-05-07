@@ -1,5 +1,6 @@
 "use client"
 import { useFinance } from "@/api/finances/page";
+import { useLanguage } from "@/contexts/languageContext/page";
 import { Box, CircularProgress, Typography } from "@mui/material"
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useSearchParams } from "next/navigation";
@@ -7,6 +8,7 @@ import { useMemo } from "react";
 
 export const ExpenseByCategory = ({ ...props }) => {
     const { data: dt, isLoading, error } = useFinance()
+    const { t } = useLanguage()
     const searchParams = useSearchParams()
     const filterPeriod = searchParams.get('period')
     const startDate = searchParams.get('start')
@@ -99,7 +101,7 @@ export const ExpenseByCategory = ({ ...props }) => {
 
     return(
         <Box { ...props } className="flex flex-col justify-center items-center w-[32%]!">
-            <Typography variant="h4" className="mt-5!">Despesas por categoria</Typography>
+            <Typography variant="h4" className="mt-5!">{t("expenseByCategory")}</Typography>
             {chartData.length > 0 ? (
                 <PieChart 
                     series={[
@@ -116,7 +118,7 @@ export const ExpenseByCategory = ({ ...props }) => {
 
                 />
             ) : (
-                <Typography> Nenhum dado encontrado</Typography>
+                <Typography>{t("notDataFound")}</Typography>
             )}
         </Box>
     )

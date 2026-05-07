@@ -1,5 +1,6 @@
 "use client"
 import { useFinance } from "@/api/finances/page"
+import { useLanguage } from "@/contexts/languageContext/page"
 import { Box, Paper, Typography } from "@mui/material"
 import { useSearchParams } from "next/navigation"
 import { useMemo } from "react"
@@ -12,6 +13,7 @@ export const BalanceIncomesExpenses = () => {
     const startDate = searchParams.get('start');
     const endDate = searchParams.get('end');
     const { data, isLoading, error } = useFinance();
+    const {t} = useLanguage()
 
     const formattedNumber = new Intl.NumberFormat(
         "pt-BR", {
@@ -141,7 +143,7 @@ export const BalanceIncomesExpenses = () => {
         <Box className="flex justify-around mt-20">
             <Box component={Paper} className="w-100 h-30">
                 <Typography className="flex justify-start pt-5 pl-4">
-                    Saldo
+                    {t("balance")}
                 </Typography>
                 <Typography className="flex justify-start pt-5 pl-4 text-3xl! font-bold">
                     {!error && isLoading ? "..." : formattedNumber.format(balance)}
@@ -149,7 +151,7 @@ export const BalanceIncomesExpenses = () => {
             </Box>
             <Box component={Paper} className="w-100 h-30">
                 <Typography className="flex justify-start pt-5 pl-4">
-                    Entradas
+                    {t("entrance")}
                 </Typography>
                 <Typography className="flex justify-start pt-5 pl-4 text-3xl! font-bold">
                     {!error && isLoading ? "..." : formattedNumber.format(income)}
@@ -157,7 +159,7 @@ export const BalanceIncomesExpenses = () => {
             </Box>
             <Box component={Paper} className="w-100 h-30">
                 <Typography className="flex justify-start pt-5 pl-4">
-                    Saídas
+                    {t("expense")}
                 </Typography>
                 <Typography className="flex justify-start pt-5 pl-4 text-3xl! font-bold">
                     {!error && isLoading ? "..." : formattedNumber.format(expense)}

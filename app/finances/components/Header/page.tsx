@@ -8,6 +8,7 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useEffect, useState } from "react";
 import { DateRange } from "@mui/x-date-pickers-pro/models";
 import { Dayjs } from "dayjs";
+import { useLanguage } from "@/contexts/languageContext/page";
 
 
 
@@ -21,6 +22,7 @@ export const Header = () => {
   const lastMonth = new Date(year, month - 1).toISOString().slice(0, 7)
   const thisYear = new Date().toISOString().slice(0, 4)
   const [value, setValue] = useState<DateRange<Dayjs>>([null, null])
+  const {t} = useLanguage()
 
   const filterDate = (period: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -48,14 +50,14 @@ export const Header = () => {
   useEffect(() => {
     if(!searchParams.get('period') && !searchParams.get('start') && !searchParams.get('end')) {
         const params = new URLSearchParams(searchParams.toString());
-        params.set('period', currentMonth);
+        params.set('period', thisYear);
         router.replace(`?${params.toString()}`)
     }
-  }, [searchParams, router, currentMonth])
+  }, [searchParams, router, thisYear])
 
   return (
     <Box className="flex w-400 ml-7 justify-between items-center">
-      <Typography variant="h4">Controle financeiro</Typography>
+      <Typography variant="h4">{t("financialControl")}</Typography>
       <Box className="flex gap-3">
         <Button
           component={Paper}
@@ -63,7 +65,7 @@ export const Header = () => {
           onClick={() => filterDate(currentMonth)} 
           variant={searchParams.get('period') === currentMonth ? "contained" : "outlined"}
           >
-            Este mês
+            <Typography color="typography01">{t("currentMonth")}</Typography>
         </Button>
 
         <Button
@@ -71,7 +73,8 @@ export const Header = () => {
           className="w-33! h-12!" 
           onClick={() => filterDate(lastMonth)} 
           variant={searchParams.get('period') === lastMonth ? "contained" : "outlined"}
-         >Último mês
+         >
+          <Typography color="typography01">{t("lastMonth")}</Typography>
          </Button>
 
         <Button
@@ -79,7 +82,8 @@ export const Header = () => {
           className="w-33! h-12!" 
           onClick={() => filterDate(thisYear)}
           variant={searchParams.get('period') === thisYear ? "contained" : "outlined"}
-        >Este ano
+        >
+          <Typography color="typography01">{t("currentYear")}</Typography>
         </Button>
 
         <Button 
@@ -87,7 +91,8 @@ export const Header = () => {
           className="w-33! h-12!" 
           onClick={() => filterDate("last-12-months")}
           variant={searchParams.get('period') === "last-12-months" ? "contained" : "outlined"}
-        >Últimos 12 meses
+        >
+          <Typography color="typography01">{t("last12Months")}</Typography>
         </Button>
         
         <Box component={Paper} className="w-65 h-12 border rounded-md p-1">
@@ -105,7 +110,9 @@ export const Header = () => {
             component={Paper}
             onClick={handleRangeDate}
             variant="outlined"
-          >Filtrar</Button>
+          >
+            <Typography color="typography01">{t("filter")}</Typography>
+          </Button>
       </Box>
     </Box>
   );
