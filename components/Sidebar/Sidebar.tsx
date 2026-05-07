@@ -39,7 +39,7 @@ export const Sidebar = () => {
                     <Button variant={page('/finances')} color='sideBarButton'><AccountBalanceWalletIcon sx={{ color: iconColor('/finances')}}/> </Button>
                 </Link>
                 <Link href="/mySettings">
-                    <Button variant={page('/mySettings') || page('/mySettings/components/support') || page('/mySettings/components/language')  ? "contained" : undefined} color='sideBarButton'><SettingsIcon sx={{ color: iconColor('/mySettings')  || page('/mySettings/components/support') || page('/mySettings/components/language') ? "sideBarActive.main" : "sideBarIconInactive.main"}}/></Button>
+                    <Button variant={page('/mySettings') || page('/mySettings/components/support') || page('/mySettings/components/language')  ? "contained" : undefined} color='sideBarButton'><SettingsIcon sx={{ color: pathname === '/mySettings'  || pathname ==='/mySettings/components/support' || pathname === '/mySettings/components/language' ? "sideBarActive.main" : "sideBarIconInactive.main"}}/></Button>
                 </Link>
             </Box>
         </Box>
