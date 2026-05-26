@@ -151,7 +151,7 @@ export const ExpenseModal = ({
         <Box
           component="form"
           onSubmit={handleSubmit(handleOnSubmit)}
-          className="w-130 h-150 text-center"
+          className="w-80 sm:w-130 h-150 text-center"
           sx={{ bgcolor: "background01.main"}}
         >
           <Box className="flex justify-end ml-5 mt-2">
@@ -159,11 +159,11 @@ export const ExpenseModal = ({
               <CloseIcon />
             </Button>
           </Box>
-          <Box className="grid grid-rows-2 grid-cols-6 mx-10 gap-10">
-            <Typography variant="h5" className="col-span-6">
+          <Box className="flex flex-col items-start sm:grid sm:grid-rows-2 sm:grid-cols-6 mx-10 gap-10">
+            <Typography variant="h5" className="sm:col-span-6">
               {transactionToEdit ? t("editExpense") : t("addExpense")}
             </Typography>
-            <FormControl className="col-span-3">
+            <FormControl className="sm:col-span-3">
               <InputLabel htmlFor="name"><Typography color="typography01">{t("name")}</Typography></InputLabel>
               <Input
                 required
@@ -177,7 +177,7 @@ export const ExpenseModal = ({
                 </Typography>
               )}
             </FormControl>
-            <FormControl className="col-span-2">
+            <FormControl className="sm:col-span-2">
               <InputLabel htmlFor="amount"><Typography color="typography01">{t("amount")}</Typography></InputLabel>
               <Input required {...register("amount")} id="amount" />
               {errors.amount && (
@@ -187,7 +187,7 @@ export const ExpenseModal = ({
               )}
             </FormControl>
 
-            <FormControl variant="filled" className="col-span-3">
+            <FormControl variant="filled" className="sm:col-span-3">
                 <Box className="flex items-center mr-3!">
                     <InputLabel><Typography color="typography01">{t("category")}</Typography></InputLabel>
                     <Controller
@@ -212,8 +212,8 @@ export const ExpenseModal = ({
                     </Button>
                 </Box>
             </FormControl>
-            <FormControl className="col-span-2" variant="filled">
-                <Box className="flex items-center mr-3!">
+            <FormControl className="sm:col-span-2" variant="filled">
+                <Box className="flex items-center sm:mr-3!">
                     <InputLabel><Typography color="typography01">{t("method")}</Typography></InputLabel>
                     <Controller
                         name="method"
@@ -237,11 +237,11 @@ export const ExpenseModal = ({
                     </Button>
                 </Box>
             </FormControl>
-            <FormControl className="col-span-2">
+            <FormControl className="sm:col-span-2">
               <Input required {...register("date")} id="date" type="date" sx={{color: "typography01.main"}}/>
             </FormControl>
             <Button
-              className="col-end-4 row-end-9 w-25! h-10!"
+              className="self-center sm:col-end-4 sm:row-end-9 w-25! h-10!"
               type="submit"
               variant="contained"
             >

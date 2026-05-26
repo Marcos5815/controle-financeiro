@@ -1,7 +1,7 @@
 "use client"
 import { useFinance } from "@/api/finances/page";
 import { useLanguage } from "@/contexts/languageContext/page";
-import { Box, CircularProgress, Typography } from "@mui/material"
+import { Box, CircularProgress, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
@@ -13,6 +13,8 @@ export const ExpenseByCategory = ({ ...props }) => {
     const filterPeriod = searchParams.get('period')
     const startDate = searchParams.get('start')
     const endDate = searchParams.get('end')
+    const theme = useTheme();
+    const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
 
     interface CategorySum {
         id: string;
@@ -96,25 +98,41 @@ export const ExpenseByCategory = ({ ...props }) => {
 
     const valueFormatter = (item: { value: number}) => `R$ ${item.value.toFixed(2).replace(".", ",")}`
 
+    
+    
     if(isLoading) return <CircularProgress />
 
 
+
     return(
-        <Box { ...props } className="flex flex-col justify-center items-center w-[32%]!">
-            <Typography variant="h4" className="mt-5!">{t("expenseByCategory")}</Typography>
+        <Box { ...props }>
+            <Typography variant="h4" className="mt-5! text-[28px]! font-bold! text-center">{t("expenseByCategory")}</Typography>
             {chartData.length > 0 ? (
                 <PieChart 
+                    className="mb-15!"
                     series={[
                         {
                             data: chartData,
                             highlightScope: {fade: 'global', highlight: 'item'},
                             faded: {innerRadius: 30, additionalRadius: -30, color: 'gray'},
-                            valueFormatter
+                            valueFormatter,
+
 
                         },
                     ]}
-                    width={400}
+                    width={280}
                     height={300}
+
+                    slotProps={{
+                        legend: {
+                            direction: isDesktop ? "vertical" : "horizontal",
+                            position: {
+                                vertical: isDesktop ? "middle" : "bottom",
+                                horizontal: isDesktop ? "end" : "center"
+                            },
+                            
+                        }
+                    }}
 
                 />
             ) : (

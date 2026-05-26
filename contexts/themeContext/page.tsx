@@ -25,8 +25,6 @@ export const AppThemeProvider = ({ children }: {children: React.ReactNode}) => {
         setMode((prev) => (prev === "light" ? "dark" : "light"))
     }
 
-
-
     
 
     useEffect(() => {

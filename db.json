@@ -301,12 +301,6 @@
   ],
   "methodCategory": [
     {
-      "id": "4",
-      "category": "Férias",
-      "isCategory": true,
-      "type": "INCOME"
-    },
-    {
       "id": "6",
       "category": "Outros",
       "isCategory": true,
@@ -395,12 +389,6 @@
       "method": "Dinheiro",
       "isCategory": false,
       "type": "EXPENSE"
-    },
-    {
-      "id": "CuXSgLdiMCY",
-      "category": "Salário",
-      "isCategory": true,
-      "type": "INCOME"
     }
   ],
   "LanguageAndLocation": [
@@ -410,17 +398,17 @@
       "isLanguage": true
     },
     {
-      "id": 2,
+      "id": "2",
       "language": "English",
       "isLanguage": true
     },
     {
-      "id": 3,
+      "id": "3",
       "location": "Brasil",
       "isLanguage": false
     },
     {
-      "id": 4,
+      "id": "4",
       "location": "United States",
       "isLanguage": false
     }

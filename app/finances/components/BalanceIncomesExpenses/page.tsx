@@ -140,28 +140,28 @@ export const BalanceIncomesExpenses = () => {
     }, [data, filterPeriod, startDate, endDate])
 
     return (
-        <Box className="flex justify-around mt-20">
-            <Box component={Paper} className="w-100 h-30">
-                <Typography className="flex justify-start pt-5 pl-4">
+        <Box className="w-full overflow-x-auto flex justify-between lg:justify-center 2xl:justify-around gap-3 xl:gap-25 mt-8 no-scrollbar lg:mt-10">
+            <Box component={Paper} className="w-full lg:w-60! pr-2">
+                <Typography className="text-[16px]! md:text-[20px]! lg:text-[24px]! flex justify-start pt-5 pl-4">
                     {t("balance")}
                 </Typography>
-                <Typography className="flex justify-start pt-5 pl-4 text-3xl! font-bold">
+                <Typography className="text-[23px]! md:text-[28px]! lg:text-[30px]! flex justify-start pt-5 pl-4 text-3xl! font-bold">
                     {!error && isLoading ? "..." : formattedNumber.format(balance)}
                 </Typography>
             </Box>
-            <Box component={Paper} className="w-100 h-30">
-                <Typography className="flex justify-start pt-5 pl-4">
+            <Box component={Paper} className="w-full lg:w-60! pr-2">
+                <Typography className="text-[16px]! md:text-[20px]! lg:text-[24px]! flex justify-start pt-5 pl-4">
                     {t("entrance")}
                 </Typography>
-                <Typography className="flex justify-start pt-5 pl-4 text-3xl! font-bold">
+                <Typography className="text-[23px]! md:text-[28px]! lg:text-[30px]! flex justify-start pt-5 pl-4 text-3xl! font-bold">
                     {!error && isLoading ? "..." : formattedNumber.format(income)}
                 </Typography>
             </Box>
-            <Box component={Paper} className="w-100 h-30">
-                <Typography className="flex justify-start pt-5 pl-4">
+            <Box component={Paper} className="w-full lg:w-60! pr-2">
+                <Typography className="text-[16px]! md:text-[20px]! lg:text-[24px]! flex justify-start pt-5 pl-4">
                     {t("expense")}
                 </Typography>
-                <Typography className="flex justify-start pt-5 pl-4 text-3xl! font-bold">
+                <Typography className="text-[23px]! md:text-[28px]! lg:text-[30px]! flex justify-start pt-5 pl-4 text-3xl! font-bold">
                     {!error && isLoading ? "..." : formattedNumber.format(expense)}
                 </Typography>
             </Box>

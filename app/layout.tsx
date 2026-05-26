@@ -26,13 +26,13 @@ export default function RootLayout({
       className={lexendDeca.className}
     >
 
-      <body className="min-h-full min-w-full flex">
+      <body className="box-border h-full w-full! flex flex-col-reverse md:flex-row">
         <QueryClientProvider client={queryClient}>
           <AppThemeProvider>
             <LanguageProvider>
               <CssBaseline />
               <Sidebar />
-              <Box className="flex flex-col mt-15 ml-2">
+              <Box className="flex-1 w-full flex flex-col mt-10 lg:items-center lg:justify-center lg:overflow-x-hidden">
                 {children}
               </Box>
             </LanguageProvider>
