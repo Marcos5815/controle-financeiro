@@ -28,7 +28,7 @@ const Finances = () => {
 
 
     return (
-        <Box className="xl:flex xl:flex-col xl:justify-between xl:items-center">
+        <Box className="pt-5 xl:flex xl:flex-col xl:justify-between xl:items-center">
             <Header />
             <BalanceIncomesExpenses />
             <Box className="flex justify-around flex-col mt-3 xl:mt-10 xl:gap-10 2xl:gap-15">

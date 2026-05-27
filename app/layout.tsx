@@ -32,7 +32,7 @@ export default function RootLayout({
             <LanguageProvider>
               <CssBaseline />
               <Sidebar />
-              <Box className="flex-1 w-full flex flex-col mt-10 lg:items-center lg:justify-center lg:overflow-x-hidden">
+              <Box className="flex-1 w-full flex flex-col lg:items-center lg:justify-center lg:overflow-x-hidden">
                 {children}
               </Box>
             </LanguageProvider>

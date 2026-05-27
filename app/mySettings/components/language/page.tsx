@@ -39,7 +39,7 @@ export const Language = () => {
     }
 
     return(
-        <Box className="flex flex-col justify-center items-center min-w-400 min-h-200">
+        <Box className="w-full h-screen flex flex-col justify-center items-center">
             <Box className="flex justify-center items-center gap-15">
                 <Button onClick={() => handleOpen(true, false)}>
                     <Typography color="typography01">{t("languages")}</Typography>

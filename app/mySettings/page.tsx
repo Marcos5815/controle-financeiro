@@ -36,7 +36,7 @@ const MySettings = () => {
     }
 
     return(
-        <Box className="flex flex-col justify-center items-center gap-15 min-w-400 min-h-200" > 
+        <Box className="h-screen w-full flex flex-col justify-center items-center" > 
             <FormControlLabel
                 control={<Switch color="success" onChange={handleChange} checked={checked}/>}
                 label={t("darkMode")}
