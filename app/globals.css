@@ -10,3 +10,19 @@
     scrollbar-width: none;  /* Firefox */
   }
 }
+
+:root {
+  color-scheme: light;
+}
+
+html.dark .cl-card,
+html.dark [data-clerk-theme="dark"] .cl-card,
+html.dark .cl-userButtonPopoverCard {
+  background-color: #091413 !important;
+}
+
+
+html.dark .cl-formButtonPrimary {
+  background-color: #90caf9 !important;
+  color: #000000 !important;
+}

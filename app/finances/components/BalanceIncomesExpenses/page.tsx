@@ -1,6 +1,7 @@
 "use client"
-import { useFinance } from "@/api/finances/page"
+import { useTransactions } from "@/api/transactions"
 import { useLanguage } from "@/contexts/languageContext/page"
+import { useAuth } from "@clerk/nextjs"
 import { Box, Paper, Typography } from "@mui/material"
 import { useSearchParams } from "next/navigation"
 import { useMemo } from "react"
@@ -8,11 +9,13 @@ import { useMemo } from "react"
 
 export const BalanceIncomesExpenses = () => {
 
+    const { userId } = useAuth()
+
     const searchParams = useSearchParams();
     const filterPeriod = searchParams.get('period');
     const startDate = searchParams.get('start');
     const endDate = searchParams.get('end');
-    const { data, isLoading, error } = useFinance();
+    const { data, isLoading, error } = useTransactions(userId);
     const {t} = useLanguage()
 
     const formattedNumber = new Intl.NumberFormat(
@@ -36,7 +39,7 @@ export const BalanceIncomesExpenses = () => {
                     return transactionDate <= today && transactionDate >= twelveMonthsAgo
                 })
                 .reduce((acc, current) => {
-                    return current.type === "INCOME" ? acc + current.amount : acc - current.amount;
+                    return current.type === "income" ? acc + current.amount : acc - current.amount;
                 }, 0)
         }
 
@@ -46,7 +49,7 @@ export const BalanceIncomesExpenses = () => {
                     return transaction.date >= startDate && transaction.date <= endDate;
                 })
                 .reduce((acc, current) => {
-                    return current.type === "INCOME" ? acc + current.amount : acc - current.amount;
+                    return current.type === "income" ? acc + current.amount : acc - current.amount;
                 }, 0)
         }
 
@@ -56,7 +59,7 @@ export const BalanceIncomesExpenses = () => {
             return transaction.date.startsWith(filterPeriod)
         })
         .reduce((acc, current) => {
-            return current.type === "INCOME" ? acc + current.amount : acc - current.amount
+            return current.type === "income" ? acc + current.amount : acc - current.amount
         }, 0)
     }, [data, filterPeriod, startDate, endDate])
 
@@ -76,7 +79,7 @@ export const BalanceIncomesExpenses = () => {
                     return transactionDate >= twelveMonthsAgo && transactionDate <= today;
                 })
                 .reduce((acc, current) => {
-                    return current.type === "INCOME" ? acc + current.amount : acc;
+                    return current.type === "income" ? acc + current.amount : acc;
                 }, 0)
         }
 
@@ -86,7 +89,7 @@ export const BalanceIncomesExpenses = () => {
                     return transaction.date >= startDate && transaction.date <= endDate;
                 })
                 .reduce((acc, current) => {
-                    return current.type === "INCOME" ? acc + current.amount : acc
+                    return current.type === "income" ? acc + current.amount : acc
                 }, 0)
         }
 
@@ -95,7 +98,7 @@ export const BalanceIncomesExpenses = () => {
             if(!filterPeriod) return data;
             return transaction.date.startsWith(filterPeriod);
         }).reduce((acc, current) => {
-            return current.type === "INCOME" ? acc + current.amount : acc
+            return current.type === "income" ? acc + current.amount : acc
         }, 0)
     }, [data, filterPeriod, startDate, endDate])
 
@@ -114,7 +117,7 @@ export const BalanceIncomesExpenses = () => {
                     return transactionDate >= twelveMonthsAgo && transactionDate <= today;
                 })
                 .reduce((acc, current) => {
-                    return current.type === "EXPENSE" ? acc + current.amount : acc;
+                    return current.type === "expense" ? acc + current.amount : acc;
                 }, 0)
         }
 
@@ -124,7 +127,7 @@ export const BalanceIncomesExpenses = () => {
                     return transaction.date >= startDate && transaction.date <= endDate;
                 })
                 .reduce((acc, current) => {
-                    return current.type === "EXPENSE" ? acc + current.amount : acc;
+                    return current.type === "expense" ? acc + current.amount : acc;
                 }, 0)
         }
 
@@ -134,7 +137,7 @@ export const BalanceIncomesExpenses = () => {
             return transaction.date.startsWith(filterPeriod)
         })
         .reduce((acc, current) => {
-            return current.type === "EXPENSE" ? acc + current.amount : acc
+            return current.type === "expense" ? acc + current.amount : acc
 
         }, 0)
     }, [data, filterPeriod, startDate, endDate])
@@ -145,15 +148,15 @@ export const BalanceIncomesExpenses = () => {
                 <Typography className="text-[16px]! md:text-[20px]! lg:text-[24px]! flex justify-start pt-5 pl-4">
                     {t("balance")}
                 </Typography>
-                <Typography className="text-[23px]! md:text-[28px]! lg:text-[30px]! flex justify-start pt-5 pl-4 text-3xl! font-bold">
+                <Typography className="text-[23px]! md:text-[28px]! lg:text-[30px]! flex justify-start text-nowrap pt-5 pl-4 text-3xl! font-bold">
                     {!error && isLoading ? "..." : formattedNumber.format(balance)}
                 </Typography>
             </Box>
             <Box component={Paper} className="w-full lg:w-60! pr-2">
-                <Typography className="text-[16px]! md:text-[20px]! lg:text-[24px]! flex justify-start pt-5 pl-4">
+                <Typography className="text-[16px]! md:text-[20px]! lg:text-[24px]! flex justify-start  pt-5 pl-4">
                     {t("entrance")}
                 </Typography>
-                <Typography className="text-[23px]! md:text-[28px]! lg:text-[30px]! flex justify-start pt-5 pl-4 text-3xl! font-bold">
+                <Typography className="text-[23px]! md:text-[28px]! lg:text-[30px]! flex justify-start text-nowrap pt-5 pl-4 text-3xl! font-bold">
                     {!error && isLoading ? "..." : formattedNumber.format(income)}
                 </Typography>
             </Box>
@@ -161,7 +164,7 @@ export const BalanceIncomesExpenses = () => {
                 <Typography className="text-[16px]! md:text-[20px]! lg:text-[24px]! flex justify-start pt-5 pl-4">
                     {t("expense")}
                 </Typography>
-                <Typography className="text-[23px]! md:text-[28px]! lg:text-[30px]! flex justify-start pt-5 pl-4 text-3xl! font-bold">
+                <Typography className="text-[23px]! md:text-[28px]! lg:text-[30px]! flex justify-start text-nowrap pt-5 pl-4 text-3xl! font-bold">
                     {!error && isLoading ? "..." : formattedNumber.format(expense)}
                 </Typography>
             </Box>

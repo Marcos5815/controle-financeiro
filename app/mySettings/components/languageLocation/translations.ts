@@ -40,7 +40,8 @@ export const Translations = {
         category: "Categoria",
         submit: "Enviar",
         country: "País",
-        chart: "Gráfico"
+        chart: "Gráfico",
+        settings: "Configurações"
 
     },
     "en-US": {
@@ -84,7 +85,8 @@ export const Translations = {
         category: "Category",
         submit: "Submit",
         country: "Country",
-        chart: "Chart"
+        chart: "Chart",
+        settings: "Settings"
 
     }
 }

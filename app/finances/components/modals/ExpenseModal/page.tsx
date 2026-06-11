@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@clerk/nextjs";
 import {
   Box,
   Button,
@@ -8,7 +9,6 @@ import {
   InputLabel,
   MenuItem,
   Modal,
-  Paper,
   Select,
   Typography,
 } from "@mui/material";
@@ -16,21 +16,19 @@ import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DataTypes, useFinance } from "@/api/finances/page";
 import { addTransactionSchema } from "../Schema/page";
-import {
-  DataTypesMethodCategory,
-  useMethodCategory,
-} from "@/api/methodCategory/page";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { InputTags } from "../../InputTags/page";
 import { uuidv4 } from "zod";
 import { useLanguage } from "@/contexts/languageContext/page";
+import { TransactionsType, useTransactions } from "@/api/transactions";
+import { MethodTypes, useMethod } from "@/api/method";
+import { CategoryTypes, useCategory } from "@/api/category";
 
 interface ExpenseModalProps {
   open: boolean;
   onClose: () => void;
-  transactionToEdit: DataTypes | null;
+  transactionToEdit: TransactionsType | null;
 }
 
 export const ExpenseModal = ({
@@ -38,12 +36,22 @@ export const ExpenseModal = ({
   onClose,
   transactionToEdit,
 }: ExpenseModalProps) => {
+
+  const { userId } = useAuth()
   const {
-    data: allMethodCategories,
-    mutateMethodCategory,
-    deleteMethodCategory,
-  } = useMethodCategory();
-  const { mutate, updateMutation } = useFinance();
+    data: queryMethod,
+    mutateMethod,
+    mutateDeleteMethod,
+    mutateUpdateMethod,
+  } = useMethod();
+
+  const {
+    data: queryCategory,
+    mutateCategory,
+    mutateDeleteCategory,
+    mutateUpdateCategory
+  } = useCategory()
+  const { mutateTransactions, mutateUpdateTransactions } = useTransactions(userId);
   const {
     control,
     register,
@@ -54,11 +62,11 @@ export const ExpenseModal = ({
     resolver: zodResolver(addTransactionSchema),
     mode: "onChange",
     defaultValues: {
-      category: "",
-      method: "",
-      methodCategory: [],
+        category_id_select_expense: "",
+        method_id_select_expense: "",
     },
   });
+  
 
   const [inputCategoryTagsOpen, setInputCategoryTagsOpen] = useState(false);
   const [inputMethodTagsOpen, setInputMethodTagsOpen] = useState(false);
@@ -79,45 +87,65 @@ export const ExpenseModal = ({
         reset({
           ...transactionToEdit,
           date: transactionToEdit.date?.slice(0, 10) || "",
-          methodCategory: allMethodCategories || [],
+          method_id_select_expense: typeof transactionToEdit.method_id === "object"
+          ? (transactionToEdit.method_id as { id: string })?.id
+          : transactionToEdit.method_id,
+
+          category_id_select_expense: typeof transactionToEdit.category_id === "object"
+          ? (transactionToEdit.category_id as { id: string })?.id
+          : transactionToEdit.category_id
         });
       } else {
         reset({
           name: "",
           amount: "",
-          category: "",
-          method: "",
           date: "",
-          methodCategory: allMethodCategories || [],
+          category_id_select_expense: "",
+          method_id_select_expense: "",
         });
       }
     }
-  }, [transactionToEdit, reset, open, allMethodCategories]);
+  }, [transactionToEdit, reset, open]);
 
   const handleOnSubmit = (formData: addTransactionSchema) => {
+    
+    if(!userId) return;
+
+    const cleanUUID = (value: string | undefined | null) => {
+          return value && value.trim() !== "" ? value : null;
+      };
+
+    const formattedData = {
+      name: formData.name,
+      amount: Number(formData.amount),
+      date: formData.date,
+      category_id: cleanUUID(formData.category_id_select_expense)!,
+      method_id: cleanUUID(formData.method_id_select_expense)!,
+      user_id: userId as string,
+      type:"expense",
+    }
+
     if (transactionToEdit) {
       const fullData = {
-        ...transactionToEdit,
-        ...formData,
-        type: "EXPENSE",
+        id: transactionToEdit.id,
+        ...formattedData
       };
 
-      updateMutation.mutate(
-        { formData: fullData, id: transactionToEdit.id },
-        {
-          onSuccess: () => {
-            onClose();
-            reset();
-          },
+      mutateUpdateTransactions(fullData, {
+        onSuccess: () => {
+          onClose()
+          reset()
         },
-      );
+        onError: (error) => {
+          console.log("Erro ao atualizar transação no ExpenseModal: ", error)
+        }
+      });
     } else {
       const fullData = {
-        ...formData,
-        type: "EXPENSE",
+        ...formattedData
       };
 
-      mutate(fullData, {
+      mutateTransactions(fullData, {
         onSuccess: () => {
           onClose();
           reset();
@@ -129,17 +157,30 @@ export const ExpenseModal = ({
     }
   };
 
-  const handleSubmitMethodCategory = (formData: DataTypesMethodCategory) => {
-    mutateMethodCategory(formData, {
-      onSuccess: () => {
-        reset();
-      },
-
-      onError: (error) => {
-        console.log("Erro ao salvar a categoria ou método", error);
-      },
-    });
-  };
+  const handleSubmitCategory = (formData: CategoryTypes) => {
+          
+          mutateCategory(formData, {
+              onSuccess: () => {
+                  reset()
+              },
+  
+              onError: (error) => {
+                  console.log("Erro ao salvar a categoria", error)
+              }
+          })
+      }
+  
+      const handleSubmitMethod = (formData: MethodTypes) => {
+          mutateMethod(formData, {
+              onSuccess: () => {
+                  reset()
+              },
+  
+              onError: (error) => {
+                  console.log("Erro ao salvar os métodos: ", error)
+              } 
+          })
+      }
 
   return (
     <Box>
@@ -191,15 +232,19 @@ export const ExpenseModal = ({
                 <Box className="flex items-center mr-3!">
                     <InputLabel><Typography color="typography01">{t("category")}</Typography></InputLabel>
                     <Controller
-                        name="category"
+                        name="category_id_select_expense"
                         control={control}
                         render={({ field }) => (
-                        <Select {...field} className="min-w-full" label="Categoria" required>
-                            {allMethodCategories?.map(
+                        <Select {...field} 
+                          className="min-w-full" 
+                          label="Categoria" 
+                          required
+                          value={field.value || ""}
+                          >
+                            {queryCategory?.map(
                             (datas) =>
-                                datas.type === "EXPENSE" &&
-                                datas.isCategory === true && (
-                                <MenuItem key={datas.id} value={datas.category}>
+                                datas.type === "expense" && (
+                                <MenuItem key={datas.id} value={datas.id}>
                                     {datas.category}
                                 </MenuItem>
                                 ),
@@ -216,15 +261,20 @@ export const ExpenseModal = ({
                 <Box className="flex items-center sm:mr-3!">
                     <InputLabel><Typography color="typography01">{t("method")}</Typography></InputLabel>
                     <Controller
-                        name="method"
+                        name="method_id_select_expense"
                         control={control}
                         render={({ field }) => (
-                        <Select {...field} className="min-w-full" label="Método" required>
-                            {allMethodCategories?.map(
+                        <Select 
+                        {...field} 
+                        className="min-w-full" 
+                        label="Método" 
+                        required
+                        value={field.value || ""}
+                        >
+                            {queryMethod?.map(
                             (datas) =>
-                                datas.type === "EXPENSE" &&
-                                datas.isCategory === false && (
-                                <MenuItem key={datas.id} value={datas.method}>
+                                datas.type === "expense" && (
+                                <MenuItem key={datas.id} value={datas.id}>
                                     {datas.method}
                                 </MenuItem>
                                 ),
@@ -249,13 +299,13 @@ export const ExpenseModal = ({
             </Button>
           </Box>
           <Controller
-            name="methodCategory"
+            name="category_id_tags_expense"
             control={control}
             render={({ field }) => {
-              const safeValue = Array.isArray(field.value) ? field.value : [];
-              console.log(field);
+              const safeValue = Array.isArray(queryCategory) ? queryCategory : [];
+              
               const currentItem = safeValue.filter((item) => {
-                return item.type === "EXPENSE" && item.isCategory === true;
+                return item.type === "expense";
               });
               const tagValues = currentItem.map((item) => item.category);
               return (
@@ -273,18 +323,17 @@ export const ExpenseModal = ({
                       );
 
                       if (removedName) {
-                        deleteMethodCategory(itemToRemove.id);
+                        mutateDeleteCategory(itemToRemove?.id);
                       }
                     } else {
                       const addedName = newNames[newNames.length - 1];
                       const newObj = {
-                        id: uuidv4(),
+                        user_id: userId as string,
                         category: addedName,
-                        isCategory: true,
-                        type: "INCOME",
+                        type: "expense",
                       };
 
-                      handleSubmitMethodCategory(newObj);
+                      handleSubmitCategory(newObj);
                     }
                   }}
                 />
@@ -292,12 +341,12 @@ export const ExpenseModal = ({
             }}
           />
           <Controller
-            name="methodCategory"
+            name="method_id_tags_expense"
             control={control}
             render={({ field }) => {
-              const safeValue = Array.isArray(field.value) ? field.value : [];
+              const safeValue = Array.isArray(queryMethod) ? queryMethod : [];
               const currentItem = safeValue.filter((item) => {
-                return item.type === "EXPENSE" && item.isCategory === false;
+                return item.type === "expense";
               });
               const tagValues = currentItem.map((item) => item.method);
               return (
@@ -311,22 +360,21 @@ export const ExpenseModal = ({
                         (name) => !newNames.includes(name),
                       );
                       const itemToRemove = currentItem.find(
-                        (item) => item.category === removedName,
+                        (item) => item.method === removedName,
                       );
 
                       if (removedName) {
-                        deleteMethodCategory(itemToRemove.id);
+                        mutateDeleteMethod(itemToRemove?.id);
                       }
                     } else {
                       const addedName = newNames[newNames.length - 1];
                       const newObj = {
-                        id: uuidv4(),
-                        category: addedName,
-                        isCategory: true,
-                        type: "INCOME",
+                        user_id: userId as string,
+                        method: addedName,
+                        type: "expense",
                       };
 
-                      handleSubmitMethodCategory(newObj);
+                      handleSubmitMethod(newObj);
                     }
                   }}
                 />

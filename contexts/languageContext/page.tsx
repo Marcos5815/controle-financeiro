@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { Translations } from "@/app/mySettings/components/language/translations";
+import { Translations } from "@/app/mySettings/components/languageLocation/translations";
 
 type LanguageType = "pt-BR" | "en-US";
 type TranslationKeys = keyof typeof Translations["pt-BR"]

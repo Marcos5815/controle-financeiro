@@ -3,6 +3,7 @@
 import '@mui/material/styles';
 import { PaletteMode } from '@mui/material';
 
+
 declare module '@mui/material/styles' {
   interface Palette {
     sideBarButton: Palette['primary'];
@@ -41,24 +42,12 @@ export const themeMode = (mode: PaletteMode) => ({
       default: mode === "light" ? "#FFFFFF" : "#091413",
       paper: mode === "light" ? "#FFFFFF" : "#091413",
     },
-    sideBarButton: {
-      main: mode === "light" ? "#408A71" : "#000000",
-    },
-    sideBarActive: {
-      main: mode === "light" ? "#FFFFFF" : "#FFFFFF",
-    },
-    sideBarIconInactive: {
-      main: mode === "light" ? "#408A71" : "#FFFFFF" ,
-    },
     typography01: {
       main: mode === "light" ? "#000000" : "#FFFFFF",
     },
     background01: {
       main: mode === "light" ? "#FFFFFF" : "#091413", 
     },
-    sideBarUser: {
-      main: mode === "light" ? "#000000" : "#FFFFFF",
-    }
   },
 });
 

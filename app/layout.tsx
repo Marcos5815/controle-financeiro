@@ -1,44 +1,44 @@
-"use client"
 import { Lexend_Deca } from "next/font/google";
 import "./globals.css";
-import { Box, CssBaseline } from "@mui/material";
-import { Sidebar } from "@/components/Sidebar/Sidebar";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AppThemeProvider } from "@/contexts/themeContext/page";
-import { LanguageProvider } from "@/contexts/languageContext/page";
+import { ClerkProvider } from '@clerk/nextjs'
+import ClientProvider from "@/components/ClientProviders/page";
+import { currentUser } from "@clerk/nextjs/server";
+import { dark } from "@clerk/ui/themes";
+import { cookies } from "next/headers";
 
-const queryClient = new QueryClient() 
-
-
-const lexendDeca = Lexend_Deca({
-  variable: "--font-lexend-deca",
-  subsets: ["latin"],
-});
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+
+  const cookieStore = await cookies();
+  const theme = cookieStore.get("theme")?.value || "light";
+  const isDarkMode = theme === "dark"
+
   return (
     <html
-      lang="pt"
-      className={lexendDeca.className}
-    >
+        lang="pt"
+        className={isDarkMode ? "dark" : "light"}
+      >
+        <body className="box-border h-full w-full! flex flex-col-reverse md:flex-row">
+          <ClerkProvider
+          appearance={{
+              theme: isDarkMode ? dark : "simple",
 
-      <body className="box-border h-full w-full! flex flex-col-reverse md:flex-row">
-        <QueryClientProvider client={queryClient}>
-          <AppThemeProvider>
-            <LanguageProvider>
-              <CssBaseline />
-              <Sidebar />
-              <Box className="flex-1 w-full flex flex-col lg:items-center lg:justify-center lg:overflow-x-hidden">
-                {children}
-              </Box>
-            </LanguageProvider>
-          </AppThemeProvider>
-        </QueryClientProvider>
-      </body>
-    </html>
+              variables: {
+                ...(isDarkMode && {
+                  colorBackground: "#091413",
+                })
+              },
+            }}
+          >
+                  <ClientProvider>
+                    {children}
+                  </ClientProvider>
+          </ClerkProvider>
+        </body>
+      </html>
   );
 }

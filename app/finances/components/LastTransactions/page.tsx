@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { DataTypes, useFinance } from "@/api/finances/page";
 import {
   Box,
   Button,
@@ -27,6 +26,8 @@ import { useSearchParams } from "next/navigation";
 import { IncomeModal } from "../modals/IncomeModal/page";
 import { ExpenseModal } from '../modals/ExpenseModal/page';
 import { useLanguage } from "@/contexts/languageContext/page";
+import { useTransactions, TransactionsType } from "@/api/transactions";
+import { useAuth } from "@clerk/nextjs";
 
 const formattedValue = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
@@ -34,8 +35,9 @@ const formattedValue = new Intl.NumberFormat('pt-BR', {
 })
 
 export const LastTransactions = ({ ...props }) => {
+  const { userId } = useAuth()
   const searchParams = useSearchParams()
-  const { data, isLoading, error, deleteTransaction } = useFinance();
+  const { data, isLoading, error, mutateDeleteTransactions } = useTransactions(userId);
 
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -46,7 +48,7 @@ export const LastTransactions = ({ ...props }) => {
 
   const options = ["Editar", "Apagar"]
 
-  const [ transactionToEdit, setTransactionToEdit] = useState<DataTypes | null>(null)
+  const [ transactionToEdit, setTransactionToEdit] = useState<TransactionsType | null>(null)
 
   const [ open, setOpen] = useState(false);
   const [ selectedIndex, setSelectedIndex ] = useState(0);
@@ -162,7 +164,7 @@ export const LastTransactions = ({ ...props }) => {
                   return (
                     <TableRow className="flex! justify-center items-center last:mb-14! xl:last:mb-0!" key={datas.id}>
                       <TableCell className="flex flex-col grow h-20! lg:w-10! xl:w-27!">
-                          <Typography color="typography01" className="text-[9px]! sm:hidden!">{datas.method}</Typography>
+                          <Typography color="typography01" className="text-[9px]! sm:hidden!">{datas.method_id.method}</Typography>
                           <Typography color="typography01" className="text-[14px] sm:hidden!">{datas.name}</Typography>
                           <Typography color="typography01" className="text-[9px]! sm:text-[15px]!">{new Date(datas.date).toLocaleDateString("pt-BR", { timeZone: "UTC" })}</Typography>
                       </TableCell>
@@ -177,13 +179,13 @@ export const LastTransactions = ({ ...props }) => {
                       >
                         <Typography 
                         color="typography01"
-                        className={`font-[540]! text-[15px]! sm:text-[15px]! ${datas?.type === "INCOME" ? "text-green-500!" : "text-red-500!"}`}
+                        className={`font-[540]! text-[15px]! sm:text-[15px]! ${datas?.type === "income" ? "text-green-500!" : "text-red-500!"}`}
                         >
-                          {datas?.type === "INCOME" ? "+ " : "- "}{formattedValue.format(datas.amount)}</Typography>
+                          {datas?.type === "income" ? "+ " : "- "}{formattedValue.format(datas.amount)}</Typography>
                       </TableCell>
                       <TableCell className="text-[8px]! sm:text-[16px]! h-20! hidden! text-right sm:flex! sm:grow! lg:w-20 xl:w-29!">
                         <Typography color="typography01">
-                          {datas.method}
+                          {datas.method_id.method}
                         </Typography>
                       </TableCell>
                       <TableCell className="flex grow h-20!" align="right">
@@ -193,7 +195,7 @@ export const LastTransactions = ({ ...props }) => {
                           aria-expanded={open ? 'true' : undefined}
                           aria-label="select merge strategy"
                           aria-haspopup="menu"
-                          onClick={(event) => {
+                          onClick={(event) => {                            
                             setSelectId(datas.id)
                             setTransactionToEdit(datas)
                             handleOnToggle(event)
@@ -230,12 +232,12 @@ export const LastTransactions = ({ ...props }) => {
                                         onClick={(event) => {
                                           handleMenuItemclick(event, index)
                                           if(option === "Apagar") {
-                                            deleteTransaction(selectId)
+                                            mutateDeleteTransactions(selectId)
                                           }
-                                          if(option === "Editar" && transactionToEdit?.type === "INCOME") {
+                                          if(option === "Editar" && transactionToEdit?.type === "income") {
                                             setIsIncomeModalOpen(true)
                                           }
-                                          if(option === "Editar" && transactionToEdit?.type === "EXPENSE") {
+                                          if(option === "Editar" && transactionToEdit?.type === "expense") {
                                             setIsExpenseModalOpen(true)
                                           }
 

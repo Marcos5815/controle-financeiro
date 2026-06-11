@@ -29,7 +29,7 @@ export const InputTags = ({value = [], onChange, open, onClose}: ValueType) => {
                         onChange(newValue as string[]);
                     }}
 
-                    renderTags={(value: string[], getTagProps) => 
+                    renderValue={(value: string[], getTagProps) => 
                         value.map((option: string, index: number) => {
                             const { key, ...tagProps} = getTagProps({ index })
                             return (

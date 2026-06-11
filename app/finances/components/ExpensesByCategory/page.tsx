@@ -1,13 +1,15 @@
 "use client"
-import { useFinance } from "@/api/finances/page";
+import { useTransactions } from "@/api/transactions";
 import { useLanguage } from "@/contexts/languageContext/page";
+import { useAuth } from "@clerk/nextjs";
 import { Box, CircularProgress, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
 export const ExpenseByCategory = ({ ...props }) => {
-    const { data: dt, isLoading, error } = useFinance()
+    const { userId } = useAuth()
+    const { data: dt, isLoading, error } = useTransactions(userId)
     const { t } = useLanguage()
     const searchParams = useSearchParams()
     const filterPeriod = searchParams.get('period')
@@ -35,10 +37,10 @@ export const ExpenseByCategory = ({ ...props }) => {
             return dt
                 .filter((item) => {
                     const itemDate = new Date(item.date)
-                    return itemDate >= lastTwelveMonths && itemDate <= today && item.type === "EXPENSE";
+                    return itemDate >= lastTwelveMonths && itemDate <= today && item.type === "expense";
                 })
                 .reduce((acc, current) => {
-                const categoryExists = acc.find(item => item.label === current.category);
+                const categoryExists = acc.find(item => item.label === current.category_id.category);
 
                 if(categoryExists){
                     categoryExists.value += current.amount;
@@ -46,7 +48,7 @@ export const ExpenseByCategory = ({ ...props }) => {
                     acc.push({
                         id: current.id,
                         value: current.amount,
-                        label: current.category
+                        label: current.category_id.category
                     })
                 }
                 return acc
@@ -56,10 +58,10 @@ export const ExpenseByCategory = ({ ...props }) => {
         if(startDate && endDate) {
             return dt   
                 .filter((item) => {
-                    return item.date >= startDate && item.date <= endDate && item.type === "EXPENSE";
+                    return item.date >= startDate && item.date <= endDate && item.type === "expense";
                 })
                 .reduce((acc, current) => {
-                const categoryExists = acc.find(item => item.label === current.category);
+                const categoryExists = acc.find(item => item.label === current.category_id.category);
 
                 if(categoryExists){
                     categoryExists.value += current.amount;
@@ -67,7 +69,7 @@ export const ExpenseByCategory = ({ ...props }) => {
                     acc.push({
                         id: current.id,
                         value: current.amount,
-                        label: current.category
+                        label: current.category_id.category
                     })
                 }
                 return acc
@@ -78,10 +80,10 @@ export const ExpenseByCategory = ({ ...props }) => {
         return dt
             .filter((item) => {
                 if(!filterPeriod) return 0
-                return item.type === "EXPENSE" && item.date.startsWith(filterPeriod)
+                return item.type === "expense" && item.date.startsWith(filterPeriod)
             })
             .reduce((acc, current) => {
-                const categoryExists = acc.find(item => item.label === current.category);
+                const categoryExists = acc.find(item => item.label === current.category_id.category);
 
                 if(categoryExists){
                     categoryExists.value += current.amount;
@@ -89,7 +91,7 @@ export const ExpenseByCategory = ({ ...props }) => {
                     acc.push({
                         id: current.id,
                         value: current.amount,
-                        label: current.category
+                        label: current.category_id.category
                     })
                 }
                 return acc
