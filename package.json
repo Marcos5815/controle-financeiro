@@ -10,6 +10,7 @@
     "server": "json-server -w db.json -p 5000"
   },
   "dependencies": {
+    "@clerk/localizations": "^4.8.1",
     "@clerk/nextjs": "^7.4.2",
     "@clerk/themes": "^2.4.57",
     "@clerk/ui": "^1.16.0",

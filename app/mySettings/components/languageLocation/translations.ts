@@ -18,6 +18,7 @@ export const Translations = {
         expense: "Saídas",
         expenseByCategory: "Despesas por categoria",
         addEntrance: "Adicionar Entrada",
+        editEntrance: "Editar Entrada",
         addEntranceLabel: "Adicione quanto dinheiro você recebeu",
         addExpense: "Adicionar despesa",
         editExpense: "Editar despesa",
@@ -41,7 +42,9 @@ export const Translations = {
         submit: "Enviar",
         country: "País",
         chart: "Gráfico",
-        settings: "Configurações"
+        settings: "Configurações",
+        edit: "Editar",
+        delete: "Apagar"
 
     },
     "en-US": {
@@ -63,6 +66,7 @@ export const Translations = {
         expense: "Expense",
         expenseByCategory: "Expense by category",
         addEntrance: "Add entrance",
+        editEntrance: "Edit entrance",
         addEntranceLabel: "Add how much money you received",
         addExpense: "Add expense",
         editExpense: "Edit expense",
@@ -86,7 +90,9 @@ export const Translations = {
         submit: "Submit",
         country: "Country",
         chart: "Chart",
-        settings: "Settings"
+        settings: "Settings",
+        edit: "Edit",
+        delete: "Delete"
 
     }
 }

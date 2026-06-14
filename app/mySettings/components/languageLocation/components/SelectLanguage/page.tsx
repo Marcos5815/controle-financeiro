@@ -1,7 +1,9 @@
 "use client"
 
-import { useSelectLanguage } from "@/api/language";
+import { LanguageType, useSelectLanguage } from "@/api/language";
+import { useProfile } from "@/api/profile";
 import { useLanguage } from "@/contexts/languageContext/page";
+import { useUser } from "@clerk/nextjs";
 import { Button, FormControl, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material"
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form"
@@ -9,27 +11,25 @@ import { Controller, useForm } from "react-hook-form"
 export const SelectLanguage = () => {
     const [openLanguage, setOpenLanguage] = useState(false)
     const { control } = useForm()
-    const { data, isLoading } = useSelectLanguage()
-    const { t, setLanguage } = useLanguage()
-    const storage = localStorage;
+    const { data } = useSelectLanguage()
+    const { t, changeLanguage } = useLanguage()
+    const { mutateUpdateUser } = useProfile()
+    const { user } = useUser()
+    console.log(data)
 
-    const handleLanguageChange = (event: SelectChangeEvent<string>, field) => {
+    const handleLanguageChange = async (event: SelectChangeEvent<string>, field) => {
         
-        const selectedLanguageId = event.target.value
-
+        const selectedLanguageCode = event.target.value
+        console.log(event)
         
-        field.onChange(selectedLanguageId)
+        field.onChange(selectedLanguageCode)
 
-        const selectedLanguage = data?.find(lang => lang.id === selectedLanguageId)
+        const selectedLanguage = data?.find(lang => lang.code === selectedLanguageCode)
+        mutateUpdateUser({language_id: selectedLanguage?.id})
 
-        if(selectedLanguageId) {
-            storage.setItem("language", selectedLanguageId.toString())
-        }
 
-        if(selectedLanguage?.name === "Português") {
-            setLanguage("pt-BR")
-        } else if (selectedLanguage?.name === "English") {
-            setLanguage("en-US")
+        if(selectedLanguage?.code) {
+            changeLanguage(selectedLanguage?.code as LanguageType)
         }
         
     }
@@ -51,7 +51,7 @@ export const SelectLanguage = () => {
                 <Controller 
                     name="language"
                     control={control}
-                    defaultValue={localStorage.getItem("language") || ""}
+                    defaultValue={user?.unsafeMetadata?.language || ""}
                     render={({field}) => (
                         <Select
                             {...field}
@@ -59,13 +59,16 @@ export const SelectLanguage = () => {
                             onClose={() => handleClose(false)}
                             onOpen={() => handleOpen(true)}
                             onChange = {(event) => handleLanguageChange(event, field)}
+                            MenuProps={{
+                                disablePortal: true,
+                            }}
                             label="Language"
                             className="w-40"
                         >
                             {
                                 data?.map((datas) => {
                                     return(
-                                        <MenuItem key={datas.id} value={datas.id}>{datas.name}</MenuItem>
+                                        <MenuItem key={datas.id} value={datas.code}>{datas.name}</MenuItem>
                                     )
                                 })
                             }

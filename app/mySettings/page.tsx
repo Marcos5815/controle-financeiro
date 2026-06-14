@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { Box, Button, FormControlLabel, Switch, Typography } from "@mui/material";
 import Link from "next/link";
 import { useContext } from "react";
+import LanguageLocation from "./components/languageLocation/page";
 
 
 const MySettings = () => {
@@ -29,11 +30,7 @@ const MySettings = () => {
                     typography: { variant: "h6", sx: { textTransform: "uppercase" } } 
                 }}
             />
-            <Link href={"/mySettings/components/languageLocation"}>
-                <Button>
-                    <Typography variant="h6" color="typography01">{t("languageAndRegion")}</Typography>
-                </Button>
-            </Link>
+            <LanguageLocation />
         </Box>
     )
 }

@@ -184,7 +184,7 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
                     </Box>
                     <Box  className="flex flex-col items-start sm:grid sm:grid-rows-2 sm:grid-cols-6 mx-10 gap-10">
                         <Typography variant="h5" className="sm:col-span-6">
-                            {transactionToEdit ? "Editar entrada" : "Adicionar Entrada"}
+                            {transactionToEdit ? t("editEntrance") : t("addEntrance")} 
                         </Typography>
                         <FormControl className="sm:col-span-3">
                             <InputLabel htmlFor="name"><Typography color="typography01">{t("name")}</Typography></InputLabel>

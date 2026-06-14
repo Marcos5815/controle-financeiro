@@ -1,26 +1,36 @@
 "use client"
 
 import { supabase } from "@/lib/supabase"
+import { useUser } from "@clerk/nextjs"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { LanguageType } from "./language"
 
 interface userType {
-    id: string,
-    country_id: string,
-    language_id: string,
+    id?: string,
+    country_id?: string,
+    language_id?: LanguageType[],
 }
 
 export const useProfile = () => {
 
     const queryClient = useQueryClient()
+    const { user } = useUser()
 
-    const getUser = async ():Promise<userType[]> => {
+    const getUser = async ():Promise<userType> => {
         const { data, error } = await supabase
             .from("users")
             .select(`
                 id, 
                 country_id, 
-                language_id
+
+                language_id (
+                    id,
+                    name,
+                    code
+                )
             `)
+            .eq("id", user?.id)
+            .single()
 
         if(error) {
             console.log("Erro ao buscar os usuários: ", error)
@@ -30,7 +40,7 @@ export const useProfile = () => {
         return data
     }
 
-    const addNewUser = async (formData: userType) => {
+    const addNewUser = async (formData: string) => {
         const { data, error } = await supabase
          .from("users")
          .insert([formData])
@@ -80,7 +90,12 @@ export const useProfile = () => {
 
     const query = useQuery({
         queryKey: ["queryUser"],
-        queryFn: getUser
+        queryFn: getUser,
+        enabled: !!user?.id,
+        staleTime: 1000 * 60 * 5,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
     })
 
 
@@ -89,7 +104,7 @@ export const useProfile = () => {
         mutateUser,
         isMutationUser: mutateUser.isPending,
         isErrorUser: mutateUser.isError,
-        mutateUpdateUser,
+        mutateUpdateUser: mutateUpdateUser.mutate,
         isMutatingUpdateUser: mutateUpdateUser.isPending,
         isErrorUpdateUser: mutateUpdateUser.isError
     })

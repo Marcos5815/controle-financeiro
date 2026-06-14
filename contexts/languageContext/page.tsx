@@ -2,42 +2,63 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { Translations } from "@/app/mySettings/components/languageLocation/translations";
+import { useUser } from "@clerk/nextjs";
+import { useProfile } from "@/api/profile";
+import { useRouter } from "next/navigation";
 
-type LanguageType = "pt-BR" | "en-US";
+
+export type LanguageType = "pt-BR" | "en-US";
 type TranslationKeys = keyof typeof Translations["pt-BR"]
-
-const storage = localStorage;
-const savedLanguage = storage.getItem("showLanguage") as "pt-BR" | "en-US"
-
-const getInitialLanguage = () => {
-    if(typeof window !== undefined) {
-        const saveLanguage = storage.getItem("showLanguage")
-        return (saveLanguage === "pt-BR" || saveLanguage === "en-US") ? savedLanguage : "pt-BR";
-    }
-    return "pt-BR";
-}
 
 interface LanguageContextData {
     language: LanguageType;
-    setLanguage: (lang: LanguageType) => void;
+    changeLanguage: (lang: LanguageType) => Promise<void>
     t: (key: TranslationKeys) => string;
 }
 
 export const languageContext = createContext<LanguageContextData>({} as LanguageContextData);
 
 export const LanguageProvider = ({ children }: {children: React.ReactNode}) => {
-    const [language, setLanguage] = useState<LanguageType>(getInitialLanguage);
+    const { user } = useUser();
+    const router = useRouter();
+    const [language, setLanguage] = useState<LanguageType>("pt-BR");
+
+    useEffect(() => {
+        const loadLanguage = async () => {
+
+            if (!user?.unsafeMetadata?.language) return;
+            
+            if (user?.unsafeMetadata?.language) {
+                setLanguage(user?.unsafeMetadata?.language);
+            }
+        };
+
+        loadLanguage();
+    }, [user?.unsafeMetadata?.language]);
+
+    const changeLanguage = async (lang: LanguageType) => {
+        if (!user) return;
+
+        setLanguage(lang)
+
+        await user.update({
+            unsafeMetadata: {
+                ...user.unsafeMetadata,
+                language: lang
+            }
+        })
+
+        router.refresh();
+
+
+    }
 
     const t = (key: TranslationKeys) => {
         return Translations[language][key] || key;
     }
 
-    useEffect(() => {
-        storage.setItem("showLanguage", language)
-    }, [language])
-
     return (
-        <languageContext.Provider value={{language, setLanguage, t}}>
+        <languageContext.Provider value={{language, changeLanguage, t}}>
             {children}
         </languageContext.Provider>
     )

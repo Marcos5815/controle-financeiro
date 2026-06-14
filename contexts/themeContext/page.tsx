@@ -17,7 +17,7 @@ export const AppThemeProvider = ({ children }: {children: React.ReactNode}) => {
 
     const toggleTheme = async () => {
         if(!user) return;
-
+ 
         const updateTheme = mode === "light" ? "dark" : "light";
 
         document.cookie = `theme=${updateTheme}; path=/; max-age=31536000`

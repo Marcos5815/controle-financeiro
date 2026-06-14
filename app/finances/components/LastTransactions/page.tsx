@@ -36,6 +36,7 @@ const formattedValue = new Intl.NumberFormat('pt-BR', {
 
 export const LastTransactions = ({ ...props }) => {
   const { userId } = useAuth()
+  const {t} = useLanguage()
   const searchParams = useSearchParams()
   const { data, isLoading, error, mutateDeleteTransactions } = useTransactions(userId);
 
@@ -46,7 +47,7 @@ export const LastTransactions = ({ ...props }) => {
   const startRangeDate = searchParams.get('start')
   const endRangeDate = searchParams.get('end')
 
-  const options = ["Editar", "Apagar"]
+  const options = [t("edit"), t("delete")]
 
   const [ transactionToEdit, setTransactionToEdit] = useState<TransactionsType | null>(null)
 
@@ -63,7 +64,7 @@ export const LastTransactions = ({ ...props }) => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
 
-  const {t} = useLanguage()
+  
 
   useEffect(() => {
     setAnchorEl(anchorRef.current)
