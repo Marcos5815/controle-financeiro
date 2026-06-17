@@ -9,13 +9,13 @@ import { UserBtn } from "@/components/UserBtn/page";
 
 export const Header = () => {
 
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <Box className="w-dvw xl:w-[80%]">
       <Box className="w-full flex justify-center items-center md:flex-col xl:flex-row">
         <Box className="w-100 flex gap-3 justify-center items-center">
-          <UserBtn key={language} />
+          <UserBtn />
           <Typography className="text-2xl!">{t("financialControl")}</Typography>
         </Box>
         <FilterModal />

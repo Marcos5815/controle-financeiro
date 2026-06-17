@@ -1,8 +1,8 @@
 import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs'
 import ClientProvider from "@/components/ClientProviders/page";
-import { dark } from "@clerk/ui/themes";
-import { cookies } from "next/headers";
+import { dark } from "@clerk/themes";
+import { cookies, headers } from "next/headers";
 import { ptBR, enUS } from "@clerk/localizations";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
@@ -16,6 +16,7 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const theme = cookieStore.get("theme")?.value || "light";
   const isDarkMode = theme === "dark"
+
   const { userId } = await auth();
   const client = await clerkClient();
 
@@ -23,8 +24,12 @@ export default async function RootLayout({
     ? await client.users.getUser(userId)
     : null;
 
-  const language = user?.unsafeMetadata?.language;
-  const localization = language === "en-US" ? enUS : ptBR;
+  const headersList = await headers();
+  const acceptLanguage = headersList.get("accept-language") || "";
+  const browserLanguage = acceptLanguage.toLowerCase().includes("pt") ? "pt-BR" : "en-US";
+
+  const userLanguage = user?.unsafeMetadata?.language as string || browserLanguage;
+  const localization = userLanguage.startsWith("en") ? enUS : ptBR;
 
   return (
     <html
@@ -36,7 +41,7 @@ export default async function RootLayout({
           <ClerkProvider
             localization={ localization }
             appearance={{
-                theme: isDarkMode ? dark : "simple",
+                theme: isDarkMode ? dark : undefined,
 
                 variables: {
                   ...(isDarkMode && {

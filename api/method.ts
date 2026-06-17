@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase"
+import { useAuth } from "@clerk/nextjs"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export interface MethodTypes {
@@ -11,12 +12,16 @@ export interface MethodTypes {
 
 export const useMethod = () =>{
 
+    const { userId } = useAuth()
     const queryClient = useQueryClient()
 
     const getMethod = async () => {
+        if(!userId) return []
+
         const { data, error } = await supabase
             .from("method")
             .select("id, type, method")
+            .eq("user_id", userId)
 
         if(error) {
             console.log("Erro ao buscar dados do Method: ", error)
@@ -54,25 +59,6 @@ export const useMethod = () =>{
         return data
     }
 
-    const updateMethod = async (formData: MethodTypes) => {
-
-        const { id, ...updateData } = formData
-
-        const { data, error } = await supabase
-            .from("method")
-            .update(updateData)
-            .eq("id", id)
-            .select()
-
-        if (error) {
-            console.log("Erro ao atualizar o method: ", error)
-            throw error
-        }
-
-        return data
-            
-    }
-
     const mutateMethod = useMutation({
         mutationKey: ["mutateMethod"],
         mutationFn: (formData: MethodTypes) => setNewMethod(formData),
@@ -89,13 +75,6 @@ export const useMethod = () =>{
         }
     })
 
-    const mutateUpdateMethod = useMutation({
-        mutationKey: ["mutateUpdateMethod"],
-        mutationFn: (formData: MethodTypes) => updateMethod(formData),
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["queryMethod"]})
-        }
-    })
 
     const query = useQuery({
         queryKey: ["queryMethod"],
@@ -110,9 +89,6 @@ export const useMethod = () =>{
         mutateDeleteMethod: mutateDeleteMethod.mutate,
         isDeleting: mutateDeleteMethod.isPending,
         deleteError: mutateDeleteMethod.isError,
-        mutateUpdateMethod,
-        isUpdating: mutateUpdateMethod.isPending,
-        updateError: mutateUpdateMethod.isError
 
     })
 

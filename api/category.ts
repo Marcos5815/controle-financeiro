@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase"
+import { useAuth } from "@clerk/nextjs"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ZodUUID } from "zod"
 
@@ -12,12 +13,17 @@ export interface CategoryTypes {
 
 export const useCategory = () =>{
 
+    const { userId } = useAuth()
+
     const queryClient = useQueryClient()
 
     const getCategory = async () => {
+        if (!userId) return []
+
         const { data, error } = await supabase
             .from("category")
             .select("id, category, type")
+            .eq("user_id", userId)
 
         if(error) {
             console.log("Erro ao buscar dados do category: ", error)
@@ -55,24 +61,6 @@ export const useCategory = () =>{
         return data
     }
 
-    const updateCategory = async (formData: CategoryTypes) => {
-    
-            const { id, ...updateData } = formData
-    
-            const { data, error } = await supabase
-                .from("category")
-                .update(updateData)
-                .eq("id", id)
-                .select()
-    
-            if (error) {
-                console.log("Erro ao atualizar o category: ", error)
-                throw error
-            }
-    
-            return data
-                
-        }
 
     const mutateCategory = useMutation({
         mutationKey: ["mutateCategory"],
@@ -90,13 +78,6 @@ export const useCategory = () =>{
         }
     })
 
-    const mutateUpdateCategory = useMutation({
-        mutationKey: ["mutateUpdateCategory"],
-        mutationFn: updateCategory,
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["queryCategory"]})
-        }
-    })
 
     const query = useQuery({
         queryKey: ["queryCategory"],
@@ -111,9 +92,6 @@ export const useCategory = () =>{
         mutateDeleteCategory: mutateDeleteCategory.mutate,
         isDeleting: mutateDeleteCategory.isPending,
         isError: mutateDeleteCategory.isError,
-        mutateUpdateCategory,
-        isUpdating: mutateUpdateCategory.isPending,
-        updateError: mutateUpdateCategory.isError
     })
 
 }

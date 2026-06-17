@@ -7,7 +7,6 @@ import { LanguageType } from "./language"
 
 interface userType {
     id?: string,
-    country_id?: string,
     language_id?: LanguageType[],
 }
 

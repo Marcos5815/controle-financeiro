@@ -42,14 +42,12 @@ export const ExpenseModal = ({
     data: queryMethod,
     mutateMethod,
     mutateDeleteMethod,
-    mutateUpdateMethod,
   } = useMethod();
 
   const {
     data: queryCategory,
     mutateCategory,
-    mutateDeleteCategory,
-    mutateUpdateCategory
+    mutateDeleteCategory
   } = useCategory()
   const { mutateTransactions, mutateUpdateTransactions } = useTransactions(userId);
   const {

@@ -265,9 +265,8 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
                         </FormControl>
                         <Button className="self-center sm:col-end-4 sm:row-end-9 w-25! h-10!" 
                             type="submit" 
-                            variant="contained"
+                            variant="contained" 
                             disabled={isUpdatingTransaction}
-                            color="sideBarButton"
                         >
                             {t("submit")}
                         </Button>
