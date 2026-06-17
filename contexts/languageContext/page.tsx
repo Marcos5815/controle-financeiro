@@ -3,16 +3,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Translations } from "@/app/mySettings/_components/languageLocation/translations";
 import { useUser } from "@clerk/nextjs";
-import { useProfile } from "@/api/profile";
 import { useRouter } from "next/navigation";
 
 
-export type LanguageType = "pt-BR" | "en-US";
+export type LanguageContextType = "pt-BR" | "en-US";
 type TranslationKeys = keyof typeof Translations["pt-BR"]
 
 interface LanguageContextData {
-    language: LanguageType;
-    changeLanguage: (lang: LanguageType) => Promise<void>
+    language: LanguageContextType;
+    changeLanguage: (lang: LanguageContextType) => Promise<void>
     t: (key: TranslationKeys) => string;
 }
 
@@ -21,7 +20,7 @@ export const languageContext = createContext<LanguageContextData>({} as Language
 export const LanguageProvider = ({ children }: {children: React.ReactNode}) => {
     const { user } = useUser();
     const router = useRouter();
-    const [language, setLanguage] = useState<LanguageType>("pt-BR");
+    const [language, setLanguage] = useState<LanguageContextType>("pt-BR");
 
     useEffect(() => {
         const loadLanguage = async () => {
@@ -29,14 +28,14 @@ export const LanguageProvider = ({ children }: {children: React.ReactNode}) => {
             if (!user?.unsafeMetadata?.language) return;
             
             if (user?.unsafeMetadata?.language) {
-                setLanguage(user?.unsafeMetadata?.language);
+                setLanguage(user?.unsafeMetadata?.language as LanguageContextType);
             }
         };
 
         loadLanguage();
     }, [user?.unsafeMetadata?.language]);
 
-    const changeLanguage = async (lang: LanguageType) => {
+    const changeLanguage = async (lang: LanguageContextType) => {
         if (!user) return;
 
         setLanguage(lang)

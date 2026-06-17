@@ -1,12 +1,12 @@
 "use client"
 
-import { LanguageType, useSelectLanguage } from "@/api/language";
+import { useSelectLanguage } from "@/api/language";
 import { useProfile } from "@/api/profile";
-import { useLanguage } from "@/contexts/languageContext/page";
+import { LanguageContextType, useLanguage } from "@/contexts/languageContext/page";
 import { useUser } from "@clerk/nextjs";
 import { Button, FormControl, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material"
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form"
+import { Controller, ControllerRenderProps, useForm, FieldValues } from "react-hook-form"
 
 export const SelectLanguage = () => {
     const [openLanguage, setOpenLanguage] = useState(false)
@@ -17,10 +17,9 @@ export const SelectLanguage = () => {
     const { user } = useUser()
     console.log(data)
 
-    const handleLanguageChange = async (event: SelectChangeEvent<string>, field) => {
+    const handleLanguageChange = async (event: SelectChangeEvent<string>, field: ControllerRenderProps<FieldValues, string>) => {
         
         const selectedLanguageCode = event.target.value
-        console.log(event)
         
         field.onChange(selectedLanguageCode)
 
@@ -28,8 +27,8 @@ export const SelectLanguage = () => {
         mutateUpdateUser({language_id: selectedLanguage?.id})
 
 
-        if(selectedLanguage?.code) {
-            changeLanguage(selectedLanguage?.code as LanguageType)
+        if(selectedLanguage && selectedLanguage.code) {
+            changeLanguage(selectedLanguage.code as LanguageContextType)
         }
         
     }
