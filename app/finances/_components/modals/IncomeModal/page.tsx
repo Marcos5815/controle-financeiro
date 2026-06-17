@@ -26,7 +26,6 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
 
     const { userId } = useAuth()
     const { 
-            data: queryTransactions,
             mutateTransactions, 
             mutateUpdateTransactions,
             isUpdatingTransaction

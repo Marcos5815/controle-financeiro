@@ -6,7 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { Box, Button, FormControlLabel, Switch, Typography } from "@mui/material";
 import Link from "next/link";
 import { useContext } from "react";
-import LanguageLocation from "./components/languageLocation/page";
+import LanguageLocation from "./_components/languageLocation/page";
 
 
 const MySettings = () => {

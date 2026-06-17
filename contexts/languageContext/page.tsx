@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { Translations } from "@/app/mySettings/components/languageLocation/translations";
+import { Translations } from "@/app/mySettings/_components/languageLocation/translations";
 import { useUser } from "@clerk/nextjs";
 import { useProfile } from "@/api/profile";
 import { useRouter } from "next/navigation";

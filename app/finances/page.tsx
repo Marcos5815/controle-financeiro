@@ -1,16 +1,16 @@
 "use client"
 import { Box, Button, Paper, Typography } from "@mui/material"
-import { Header } from "./components/Header/page"
-import { BalanceIncomesExpenses } from "./components/BalanceIncomesExpenses/page"
-import { ExpenseByCategory } from "./components/ExpensesByCategory/page"
-import { LastTransactions } from "./components/LastTransactions/page"
+import { Header } from "./_components/Header/page"
+import { BalanceIncomesExpenses } from "./_components/BalanceIncomesExpenses/page"
+import { ExpenseByCategory } from "./_components/ExpensesByCategory/page"
+import { LastTransactions } from "./_components/LastTransactions/page"
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useState } from "react"
-import { IncomeModal } from "./components/modals/IncomeModal/page"
-import { ExpenseModal } from "./components/modals/ExpenseModal/page"
+import { IncomeModal } from "./_components/modals/IncomeModal/page"
+import { ExpenseModal } from "./_components/modals/ExpenseModal/page"
 import { useLanguage } from "@/contexts/languageContext/page"
-import { TransactionChartButton } from "./components/TransactionsChartButton/page"
+import { TransactionChartButton } from "./_components/TransactionsChartButton/page"
 
 const Finances = () => {
 
