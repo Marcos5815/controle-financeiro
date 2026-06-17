@@ -1,3 +1,5 @@
+"use client"
+
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
