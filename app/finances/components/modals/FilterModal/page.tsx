@@ -1,3 +1,5 @@
+"use client"
+
 import { Box, Button, Modal, Paper, } from "@mui/material";
 import SortIcon from '@mui/icons-material/Sort';
 import { useState } from "react";
