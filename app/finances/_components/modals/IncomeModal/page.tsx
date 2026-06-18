@@ -145,7 +145,7 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
         
         mutateCategory(formData, {
             onSuccess: () => {
-                reset()
+                console.log("Categoria adicionada com sucessso")
             },
 
             onError: (error) => {
@@ -157,7 +157,7 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
     const handleSubmitMethod = (formData: MethodTypes) => {
         mutateMethod(formData, {
             onSuccess: () => {
-                reset()
+                console.log("Metodo adicionado com sucessso")
             },
 
             onError: (error) => {
@@ -260,7 +260,21 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
                             </Box>
                         </FormControl>
                         <FormControl className="sm:col-span-2">
-                            <Input required {...register("date")} id="date" type="date" sx={{color: "typography01.main"}}/>
+                            <Input required {...register("date")} id="date" type="date" 
+                                sx={{
+                                    color: "typography01.main",
+                                    width: "100%",
+                                    "& input[type='date']:before": {
+                                        content: "attr(placeholder)",
+                                        color: "text.secondary",
+                                        marginRight: "0.5em",
+                                    },
+                                    "& input[type='date']:focus:before, & input[type='date']:valid:before": {
+                                        content: "''",
+                                        display: "none"
+                                    }
+                                    
+                                }}/>
                         </FormControl>
                         <Button className="self-center sm:col-end-4 sm:row-end-9 w-25! h-10!" 
                             type="submit" 

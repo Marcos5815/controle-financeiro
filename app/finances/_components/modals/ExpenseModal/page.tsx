@@ -159,7 +159,7 @@ export const ExpenseModal = ({
           
           mutateCategory(formData, {
               onSuccess: () => {
-                  reset()
+                  console.log("Categoria adicionada com sucessso")
               },
   
               onError: (error) => {
@@ -171,7 +171,7 @@ export const ExpenseModal = ({
       const handleSubmitMethod = (formData: MethodTypes) => {
           mutateMethod(formData, {
               onSuccess: () => {
-                  reset()
+                  console.log("Metodo adicionado com sucessso")
               },
   
               onError: (error) => {
