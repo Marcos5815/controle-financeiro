@@ -13,6 +13,10 @@ import { TransactionsType, useTransactions } from "@/api/transactions";
 import { MethodTypes, useMethod } from "@/api/method";
 import { useAuth } from "@clerk/nextjs";
 import { CategoryTypes, useCategory } from "@/api/category";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 
 interface TransactionModalProps {
@@ -51,7 +55,6 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
     const [ inputCategoryTagsOpen, setInputCategoryTagsOpen ] = useState(false)
     const [ inputMethodTagsOpen, setInputMethodTagsOpen ] = useState(false)
     const {t} = useLanguage()
-
     const handleCategoryInputTagsOpen = () => {
         setInputCategoryTagsOpen((prev) => !prev)
     }
@@ -259,22 +262,36 @@ export const IncomeModal = ({ open, onClose, transactionToEdit }: TransactionMod
                                 </Button>
                             </Box>
                         </FormControl>
-                        <FormControl className="sm:col-span-2">
-                            <Input required {...register("date")} id="date" type="date" 
-                                sx={{
-                                    color: "typography01.main",
-                                    width: "100%",
-                                    "& input[type='date']:before": {
-                                        content: "attr(placeholder)",
-                                        color: "text.secondary",
-                                        marginRight: "0.5em",
-                                    },
-                                    "& input[type='date']:focus:before, & input[type='date']:valid:before": {
-                                        content: "''",
-                                        display: "none"
-                                    }
+                        <FormControl className="sm:col-span-2 w-39!">
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <Controller 
+                                        name="date"
+                                        control={control}
+                                        rules={{ required: "A data é obrigatória"}}
+                                        render={({field: { onChange, value }}) => (
+                                            <DatePicker 
+                                            format="DD/MM/YYYY"
+                                            label={`${t("date")}`}
+                                            value={value ? dayjs(value) : null} 
+                                            onChange={(newValue) => {
+                                                const formattedDate = newValue ? newValue.format("YYYY-MM-DD") : ""
+                                                onChange(formattedDate)
+                                            }}
+                                           
+                                            slotProps={{
+                                                textField: {
+                                                    sx: { 
+                                                        color: "typography01.main",
+                                                        '& .MuiInputBase-input': {
+                                                             color: "typography01.main",},
+                                                     }
+                                                }
+                                            }}
+                                        />
+                                        )}
+                                    />
                                     
-                                }}/>
+                            </LocalizationProvider>
                         </FormControl>
                         <Button className="self-center sm:col-end-4 sm:row-end-9 w-25! h-10!" 
                             type="submit" 

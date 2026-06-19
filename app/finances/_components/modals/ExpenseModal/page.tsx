@@ -24,6 +24,10 @@ import { useLanguage } from "@/contexts/languageContext/page";
 import { TransactionsType, useTransactions } from "@/api/transactions";
 import { MethodTypes, useMethod } from "@/api/method";
 import { CategoryTypes, useCategory } from "@/api/category";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 interface ExpenseModalProps {
   open: boolean;
@@ -285,8 +289,36 @@ export const ExpenseModal = ({
                     </Button>
                 </Box>
             </FormControl>
-            <FormControl className="sm:col-span-2">
-              <Input required {...register("date")} id="date" type="date" sx={{color: "typography01.main"}}/>
+            <FormControl className="sm:col-span-2 w-39!">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <Controller 
+                          name="date"
+                          control={control}
+                          rules={{ required: "A data é obrigatória"}}
+                          render={({field: { onChange, value }}) => (
+                              <DatePicker 
+                              format="DD/MM/YYYY"
+                              label={`${t("date")}`}
+                              value={value ? dayjs(value) : null} 
+                              onChange={(newValue) => {
+                                  const formattedDate = newValue ? newValue.format("YYYY-MM-DD") : ""
+                                  onChange(formattedDate)
+                              }}
+                              
+                              slotProps={{
+                                  textField: {
+                                      sx: { 
+                                          color: "typography01.main",
+                                          '& .MuiInputBase-input': {
+                                                color: "typography01.main",},
+                                        }
+                                  }
+                              }}
+                          />
+                          )}
+                      />
+                      
+              </LocalizationProvider>
             </FormControl>
             <Button
               className="self-center sm:col-end-4 sm:row-end-9 w-25! h-10!"
