@@ -164,32 +164,32 @@ export const LastTransactions = ({ ...props }) => {
                 .map((datas) => {
                   return (
                     <TableRow className="flex! justify-center items-center last:mb-14! xl:last:mb-0!" key={datas.id}>
-                      <TableCell className="flex flex-col grow h-20! lg:w-10! xl:w-27!">
+                      <TableCell className="flex flex-col grow h-24! lg:h-20! w-32 lg:w-10! xl:w-27!">
                           <Typography color="typography01" className="text-[9px]! sm:hidden!">{datas.method_id.method}</Typography>
                           <Typography color="typography01" className="text-[14px] sm:hidden!">{datas.name}</Typography>
                           <Typography color="typography01" className="text-[9px]! sm:text-[15px]!">{new Date(datas.date).toLocaleDateString("pt-BR", { timeZone: "UTC" })}</Typography>
                       </TableCell>
-                      <TableCell className="hidden! sm:flex! sm:grow h-20! lg:w-35 xl:w-35!" align="left">
+                      <TableCell className="hidden! sm:flex! sm:grow h-24! lg:h-20! lg:w-35 xl:w-35!" align="left">
                         <Typography color="typography01 text-[15px]!">
                           {datas.name}
                         </Typography>
                       </TableCell>
                       <TableCell
-                        className="flex! items-center! grow h-20! lg:w-15 xl:w-35!"
+                        className="flex! items-center! grow h-24! lg:h-20! lg:w-15 xl:w-35!"
                         align="left"
                       >
                         <Typography 
                         color="typography01"
-                        className={`font-[540]! text-[15px]! sm:text-[15px]! ${datas?.type === "income" ? "text-green-500!" : "text-red-500!"}`}
+                        className={`font-[540]! w-24.5 text-[15px]! sm:text-[15px]! ${datas?.type === "income" ? "text-green-500!" : "text-red-500!"}`}
                         >
                           {datas?.type === "income" ? "+ " : "- "}{formattedValue.format(datas.amount)}</Typography>
                       </TableCell>
-                      <TableCell className="text-[8px]! sm:text-[16px]! h-20! hidden! text-right sm:flex! sm:grow! lg:w-20 xl:w-29!">
+                      <TableCell className="text-[8px]! sm:text-[16px]! h-24! lg:h-20! hidden! text-right sm:flex! sm:grow! lg:w-20 xl:w-29!">
                         <Typography color="typography01">
                           {datas.method_id.method}
                         </Typography>
                       </TableCell>
-                      <TableCell className="flex grow h-20!" align="right">
+                      <TableCell className="flex grow h-24! lg:h-20!" align="right">
                         <Button
                           size="small"
                           aria-controls={open ? 'split-button-menu' : undefined}
