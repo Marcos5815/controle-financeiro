@@ -8,6 +8,7 @@ import { LanguageType } from "./language"
 interface userType {
     id?: string,
     language_id?: LanguageType[],
+    theme?: "dark" | "light"
 }
 
 export const useProfile = () => {
@@ -20,7 +21,7 @@ export const useProfile = () => {
             .from("users")
             .select(`
                 id, 
-                country_id, 
+                theme, 
 
                 language_id (
                     id,
@@ -30,7 +31,7 @@ export const useProfile = () => {
             `)
             .eq("id", user?.id)
             .single()
-
+        
         if(error) {
             console.log("Erro ao buscar os usuários: ", error)
             throw error
@@ -53,13 +54,12 @@ export const useProfile = () => {
         return data
     }
 
-    const updateUser = async (formData: userType) => {
+    const updateUser = async ({ id, theme, language_id }: userType) => {
 
-        const { id, ...updateData } = formData
 
         const { data, error } = await supabase
             .from("users")
-            .update(updateData)
+            .update({ theme, language_id })
             .eq("id", id)
             .select()
 

@@ -14,21 +14,15 @@ export default async function RootLayout({
   
 
   const cookieStore = await cookies();
-  const theme = cookieStore.get("theme")?.value || "light";
+  const theme = (cookieStore.get("theme")?.value as "light" | "dark") ??
+    "light";
   const isDarkMode = theme === "dark"
-
-  const { userId } = await auth();
-  const client = await clerkClient();
-
-  const user = userId
-    ? await client.users.getUser(userId)
-    : null;
 
   const headersList = await headers();
   const acceptLanguage = headersList.get("accept-language") || "";
   const browserLanguage = acceptLanguage.toLowerCase().includes("pt") ? "pt-BR" : "en-US";
 
-  const userLanguage = user?.unsafeMetadata?.language as string || browserLanguage;
+  const userLanguage = cookieStore.get("theme")?.value as string || browserLanguage;
   const localization = userLanguage.startsWith("en") ? enUS : ptBR;
 
   return (
@@ -51,7 +45,7 @@ export default async function RootLayout({
               }}
               
           >
-            <ClientProvider>    
+            <ClientProvider initialTheme={theme}>    
                 {children}
             </ClientProvider>
           </ClerkProvider>

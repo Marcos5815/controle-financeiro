@@ -15,7 +15,6 @@ export const SelectLanguage = () => {
     const { t, changeLanguage } = useLanguage()
     const { mutateUpdateUser } = useProfile()
     const { user } = useUser()
-    console.log(data)
 
     const handleLanguageChange = async (event: SelectChangeEvent<string>, field: ControllerRenderProps<FieldValues, string>) => {
         

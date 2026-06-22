@@ -1,47 +1,36 @@
 "use client"
+import { useProfile } from "@/api/profile";
 import { themeMode } from "@/app/theme";
 import { useUser } from "@clerk/nextjs";
 import { createTheme, ThemeProvider } from "@mui/material"
 import { useRouter } from "next/navigation";
-import { createContext, useMemo } from "react"
+import { createContext, useMemo, useState } from "react"
+import Cookies from "js-cookie";
 
-export const ThemeContext = createContext({ toggleTheme: () => {} })
+export const ThemeContext = createContext({
+    toggleTheme: () => {} })
 
-export const AppThemeProvider = ({ children }: {children: React.ReactNode}) => {
+export const AppThemeProvider = ({ children, initialTheme }: {children: React.ReactNode, initialTheme: "light" | "dark"}) => {
 
 
     const { user, isLoaded } = useUser()
+    const {  mutateUpdateUser } = useProfile()
     const router = useRouter();
 
-    const mode = (user?.unsafeMetadata?.theme as "light" | "dark") || "light"
+    // const mode = (Cookies.get("theme") as "dark" | "light") || "light"
+    const [mode, setMode] = useState<"light" | "dark">(initialTheme);
+
 
     const toggleTheme = async () => {
         if(!user) return;
- 
+        
         const updateTheme = mode === "light" ? "dark" : "light";
+        setMode(updateTheme)
 
-        document.cookie = `theme=${updateTheme}; path=/; max-age=31536000`
-
-        const root = window.document.documentElement;
-        if( updateTheme === "dark") {
-            root.classList.remove("light");
-            root.classList.add("dark")
-        } else {
-            root.classList.remove("dark");
-            root.classList.add("light")
-        }
+        mutateUpdateUser({id: user.id, theme: updateTheme})
+        Cookies.set("theme", updateTheme, {path: "/", expires: 365});
 
         router.refresh();
-
-        await user.update({
-            unsafeMetadata: {
-                ...user.unsafeMetadata,
-                theme: updateTheme,
-            }
-        })
-
-        
-        
     }
 
     const theme = useMemo(() => createTheme(themeMode(mode)), [mode])

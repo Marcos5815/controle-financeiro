@@ -1,10 +1,12 @@
 import MySettings from "@/app/mySettings/page";
 import { useLanguage } from "@/contexts/languageContext/page";
 import { Show, UserButton } from "@clerk/nextjs";
+import { useState } from "react";
 
 export const UserBtn = () => {
 
   const { t } = useLanguage()
+  const [ open, setOpen ] = useState(false)
 
   return (
     <Show when="signed-in">
@@ -18,14 +20,16 @@ export const UserBtn = () => {
           },
         }}
       >
-        <UserButton.UserProfilePage
-          label={t("settings")}
-          url="Config"
-          labelIcon={<span>⚙️</span>}
-        >
-          <MySettings />
-        </UserButton.UserProfilePage>
+        <UserButton.MenuItems>
+          <UserButton.Action
+            label={t("settings")}
+            labelIcon={<span>⚙️</span>}
+            onClick={() => setOpen(true)}
+          />
+        </UserButton.MenuItems>
       </UserButton>
+
+      <MySettings open={open} onClose={() => setOpen(false)} />
     </Show>
   );
 };

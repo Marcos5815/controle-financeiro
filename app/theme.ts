@@ -48,6 +48,9 @@ export const themeMode = (mode: PaletteMode) => ({
     background01: {
       main: mode === "light" ? "#FFFFFF" : "#091413", 
     },
+    settingsCloseIcon: {
+      main: mode === "light" ? "#000000" : "#FFFFFF",
+    },
   },
 });
 
