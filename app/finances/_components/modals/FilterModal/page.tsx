@@ -12,7 +12,7 @@ export const FilterModal = () => {
   return (
     <Box>
       <Button onClick={() => setOpen(true)}>
-        <SortIcon className="md:hidden!"/>
+        <SortIcon className="md:hidden!" sx={{color: "typography01.main"}}/>
       </Button>
       <Modal open={open} onClose={() => setOpen(false)} className="flex justify-center items-center">
           <Box component={Paper} className="flex justify-center items-center w-[70%]">
