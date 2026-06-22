@@ -196,6 +196,7 @@ export const LastTransactions = ({ ...props }) => {
                           aria-expanded={open ? 'true' : undefined}
                           aria-label="select merge strategy"
                           aria-haspopup="menu"
+                          sx={{color: "typography01.main"}}
                           onClick={(event) => {                            
                             setSelectId(datas.id)
                             setTransactionToEdit(datas)
