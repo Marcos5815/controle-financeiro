@@ -3,7 +3,7 @@
 import { Box, Button, Modal, Paper, } from "@mui/material";
 import SortIcon from '@mui/icons-material/Sort';
 import { useState } from "react";
-import { Filters } from "../../Filters/page";
+import { Filters } from "../../Filters";
 
 export const FilterModal = () => {
   

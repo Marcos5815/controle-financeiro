@@ -9,7 +9,7 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { useEffect, useState } from "react";
 import { DateRange } from "@mui/x-date-pickers-pro/models";
 import { Dayjs } from "dayjs";
-import { useLanguage } from "@/contexts/languageContext/page";
+import { useLanguage } from "@/contexts/languageContext";
 
 interface setIsOpenProp {
   setIsOpen: (value: boolean) => void;

@@ -23,9 +23,9 @@ import {
 } from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useSearchParams } from "next/navigation";
-import { IncomeModal } from "../modals/IncomeModal/page";
-import { ExpenseModal } from '../modals/ExpenseModal/page';
-import { useLanguage } from "@/contexts/languageContext/page";
+import { IncomeModal } from "../modals/IncomeModal";
+import { ExpenseModal } from '../modals/ExpenseModal';
+import { useLanguage } from "@/contexts/languageContext";
 import { useTransactions, TransactionsType } from "@/api/transactions";
 import { useAuth } from "@clerk/nextjs";
 

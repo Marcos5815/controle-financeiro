@@ -1,6 +1,6 @@
 "use client"
 import { useTransactions } from "@/api/transactions"
-import { useLanguage } from "@/contexts/languageContext/page"
+import { useLanguage } from "@/contexts/languageContext"
 import { useAuth } from "@clerk/nextjs"
 import { Box, Paper, Typography } from "@mui/material"
 import { useSearchParams } from "next/navigation"

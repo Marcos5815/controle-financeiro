@@ -1,7 +1,7 @@
 "use client"
 
-import { useLanguage } from "@/contexts/languageContext/page";
-import { ThemeContext } from "@/contexts/themeContext/page";
+import { useLanguage } from "@/contexts/languageContext";
+import { ThemeContext } from "@/contexts/themeContext";
 import { useUser } from "@clerk/nextjs";
 import { Box, Button, FormControlLabel, Modal, Paper, Switch, Typography } from "@mui/material";
 import Cookies from "js-cookie";

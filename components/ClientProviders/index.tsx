@@ -2,8 +2,8 @@
 
 import { Box, CssBaseline } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AppThemeProvider } from "@/contexts/themeContext/page";
-import { LanguageProvider } from "@/contexts/languageContext/page";
+import { AppThemeProvider } from "@/contexts/themeContext";
+import { LanguageProvider } from "@/contexts/languageContext";
 import { useState } from "react";
 
 const ClientProvider = ({ children, initialTheme }: { children: React.ReactNode, initialTheme: "light" | "dark" }) => {

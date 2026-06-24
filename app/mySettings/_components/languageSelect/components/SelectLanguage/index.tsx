@@ -2,7 +2,7 @@
 
 import { useSelectLanguage } from "@/api/language";
 import { useProfile } from "@/api/profile";
-import { LanguageContextType, useLanguage } from "@/contexts/languageContext/page";
+import { LanguageContextType, useLanguage } from "@/contexts/languageContext";
 import { useUser } from "@clerk/nextjs";
 import { Button, FormControl, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material"
 import { useState } from "react";

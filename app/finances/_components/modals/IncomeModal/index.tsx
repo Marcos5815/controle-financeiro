@@ -6,9 +6,9 @@ import { useEffect, useState } from "react"
 import CloseIcon from '@mui/icons-material/Close';
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addTransactionSchema } from "../Schema/page";
-import { InputTags } from "../../InputTags/page";
-import { useLanguage } from "@/contexts/languageContext/page";
+import { addTransactionSchema } from "../Schema";
+import { InputTags } from "../../InputTags";
+import { useLanguage } from "@/contexts/languageContext";
 import { TransactionsType, useTransactions } from "@/api/transactions";
 import { MethodTypes, useMethod } from "@/api/method";
 import { useAuth } from "@clerk/nextjs";

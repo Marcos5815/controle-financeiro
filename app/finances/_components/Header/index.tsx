@@ -1,9 +1,9 @@
 "use client"
 import { Box, Typography } from "@mui/material";
-import { FilterModal } from "../modals/FilterModal/page";
-import { useLanguage } from "@/contexts/languageContext/page";
-import { Filters } from "../Filters/page";
-import { UserBtn } from "@/components/UserBtn/page";
+import { FilterModal } from "../modals/FilterModal";
+import { useLanguage } from "@/contexts/languageContext";
+import { Filters } from "../Filters";
+import { UserBtn } from "@/components/UserBtn";
 
 
 

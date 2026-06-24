@@ -1,6 +1,6 @@
 "use client"
 import { useTransactions } from "@/api/transactions";
-import { useLanguage } from "@/contexts/languageContext/page";
+import { useLanguage } from "@/contexts/languageContext";
 import { useAuth } from "@clerk/nextjs";
 import { Box, CircularProgress, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { PieChart } from '@mui/x-charts/PieChart';

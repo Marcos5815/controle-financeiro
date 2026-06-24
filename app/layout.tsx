@@ -1,6 +1,6 @@
 import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs'
-import ClientProvider from "@/components/ClientProviders/page";
+import ClientProvider from "@/components/ClientProviders";
 import { dark } from "@clerk/themes";
 import { cookies, headers } from "next/headers";
 import { ptBR, enUS } from "@clerk/localizations";

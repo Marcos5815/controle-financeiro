@@ -1,10 +1,10 @@
 "use client"
 
-import { useLanguage } from "@/contexts/languageContext/page"
+import { useLanguage } from "@/contexts/languageContext"
 import { Box, Button, Typography } from "@mui/material"
 import { useState } from "react"
-import { LastTransactions } from "../LastTransactions/page"
-import { ExpenseByCategory } from "../ExpensesByCategory/page"
+import { LastTransactions } from "../LastTransactions"
+import { ExpenseByCategory } from "../ExpensesByCategory"
 
 
 

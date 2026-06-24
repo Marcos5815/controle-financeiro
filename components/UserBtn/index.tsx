@@ -1,5 +1,5 @@
 import MySettings from "@/app/mySettings/page";
-import { useLanguage } from "@/contexts/languageContext/page";
+import { useLanguage } from "@/contexts/languageContext";
 import { Show, UserButton } from "@clerk/nextjs";
 import { useState } from "react";
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { SelectLanguage } from "./components/SelectLanguage/page";
+import { SelectLanguage } from "./components/SelectLanguage";
 import { Box } from "@mui/material";
 
 export const LanguageSelect = () => {
