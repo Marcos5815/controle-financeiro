@@ -1,5 +1,7 @@
 # Finances
 
+Observação: A aplicação utiliza o plano gratuito do Supabase. Caso o projeto fique algum tempo sem acesso, a primeira requisição pode levar alguns segundos devido ao cold start.
+
 ## Instalação
 
 - npm install
